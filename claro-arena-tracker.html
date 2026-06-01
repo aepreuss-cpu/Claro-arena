@@ -747,7 +747,7 @@ function validarPartido(){
 function abrirModal(tipo){
   tipoGolActual=tipo;
   document.getElementById('modalGolTitle').textContent=tipo==='favor'?'⚽ Gol a Favor':'💀 Gol en Contra';
-  ['goleador','asistencia','arco','pierna','cabeza','penal','libre','contexto'].forEach(k=>chipSelections[k]='');
+  ['goleador','asistencia','arco','pierna','cabeza','penal','libre','rebote','contexto'].forEach(k=>chipSelections[k]='');
   document.querySelectorAll('#modalGol .chip').forEach(c=>c.classList.remove('selected'));
   document.getElementById('golMin').value='';document.getElementById('golGoleadorCustom').value='';document.getElementById('golAsistenciaCustom').value='';document.getElementById('golResultadoParcial').value='';
   const todos=[...new Set([...getJugadores(),...[v('cam1'),v('cam2'),v('cam3'),v('cam4'),v('cam5')].filter(Boolean)])];
