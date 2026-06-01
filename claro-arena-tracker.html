@@ -849,53 +849,19 @@ function nuevoPartido(){
   document.getElementById('climaAutoBox').style.display='none';document.getElementById('climaTag').style.display='none';
   document.getElementById('aliTag').style.display='none';
   resetImport();
-  function parsearAlineacion(){
-  const texto=document.getElementById('alineacionTexto').value.trim();
-  if(!texto){showNotif('Pega la alineación primero','err');return;}
-  // Separar por coma, punto y coma, salto de línea o numeración (1. Nombre)
-  const jugadores=texto
-    .split(/[,;
-]+/)
-    .map(j=>j.replace(/^\d+[\.\-\)]\s*/,'').trim()) // quitar numeración
-    .filter(Boolean);
-  if(jugadores.length<1){showNotif('No se reconocieron jugadores','err');return;}
-  // Limpiar campos primero
-  for(let i=1;i<=11;i++) document.getElementById('jug'+i).value='';
-  jugadores.slice(0,11).forEach((j,i)=>{
-    document.getElementById('jug'+(i+1)).value=j;
-  });
-  // Si hay más de 11, van a cambios
-  jugadores.slice(11,16).forEach((j,i)=>{
-    document.getElementById('cam'+(i+1)).value=j;
-  });
-  showNotif(`✓ ${Math.min(jugadores.length,11)} jugadores distribuidos`,'ok');
-  document.getElementById('alineacionTexto').value='';
-}
-
-document.getElementById('fecha').valueAsDate=new Date();
+  document.getElementById('fecha').valueAsDate=new Date();
   goStep(1);
 }
 
 function parsearAlineacion(){
   const texto=document.getElementById('alineacionTexto').value.trim();
   if(!texto){showNotif('Pega la alineación primero','err');return;}
-  // Separar por coma, punto y coma, salto de línea o numeración (1. Nombre)
-  const jugadores=texto
-    .split(/[,;
-]+/)
-    .map(j=>j.replace(/^\d+[\.\-\)]\s*/,'').trim()) // quitar numeración
-    .filter(Boolean);
+  const jugadores=texto.split(/[,;\n]+/).map(j=>j.replace(/^\d+[.\-)\s]+/,'').trim()).filter(Boolean);
   if(jugadores.length<1){showNotif('No se reconocieron jugadores','err');return;}
-  // Limpiar campos primero
   for(let i=1;i<=11;i++) document.getElementById('jug'+i).value='';
-  jugadores.slice(0,11).forEach((j,i)=>{
-    document.getElementById('jug'+(i+1)).value=j;
-  });
-  // Si hay más de 11, van a cambios
-  jugadores.slice(11,16).forEach((j,i)=>{
-    document.getElementById('cam'+(i+1)).value=j;
-  });
-  showNotif(`✓ ${Math.min(jugadores.length,11)} jugadores distribuidos`,'ok');
+  jugadores.slice(0,11).forEach((j,i)=>{ document.getElementById('jug'+(i+1)).value=j; });
+  jugadores.slice(11,16).forEach((j,i)=>{ document.getElementById('cam'+(i+1)).value=j; });
+  showNotif('✓ '+Math.min(jugadores.length,11)+' jugadores distribuidos','ok');
   document.getElementById('alineacionTexto').value='';
 }
 
