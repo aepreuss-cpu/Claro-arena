@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claro Arena Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -430,6 +429,7 @@
       <div class="chip" onclick="selectChip(this,'cabeza')">🗣️ Cabeza</div>
       <div class="chip" onclick="selectChip(this,'penal')">📍 Penal</div>
       <div class="chip" onclick="selectChip(this,'libre')">🎯 Tiro Libre</div>
+      <div class="chip" onclick="selectChip(this,'rebote')">🔄 Rebote</div>
     </div>
     <div class="chip-group"><label>Contexto</label>
       <div class="chip" onclick="selectChip(this,'contexto')">Amplia Ventaja (UC)</div>
@@ -456,7 +456,7 @@ const TSDB_BASE = 'https://www.thesportsdb.com/api/v1/json/123';
 const FORM_PARTIDOS_ID='1FAIpQLSfcLNEkUEdHIBdQ8N5-gNPbySydbArg58svb72E4IIgbBxAPA';
 const FORM_GOLES_ID='1FAIpQLSeqVqHsAkvWo-rQH_btZVY0kQWAngFiQbI6gQG1IykAByM07Q';
 const EP={fecha:'entry.56111708',hora:'entry.364341672',presencial:'entry.1844214041',tribuna:'entry.414281671',asiento:'entry.5512002',competicion:'entry.598909896',rival:'entry.534357753',resultMarcador:'entry.913827644',resultado:'entry.431827316',acompanante:'entry.448279616',clima:'entry.722063818',poleraEquipo:'entry.209406813',poleraAgu:'entry.288128809',dt:'entry.1902210398',jug1:'entry.1350269840',jug2:'entry.1398730671',jug3:'entry.2006206749',jug4:'entry.1173345965',jug5:'entry.1806693561',jug6:'entry.1944001311',jug7:'entry.1608364224',jug8:'entry.238964024',jug9:'entry.1368872066',jug10:'entry.1293778777',jug11:'entry.1732850495',cam1:'entry.508667989',cam2:'entry.39261508',cam3:'entry.697109896',cam4:'entry.2132585787',cam5:'entry.1356796343'};
-const EG={fecha:'entry.56111708',hora:'entry.364341672',presencial:'entry.1844214041',tribuna:'entry.414281671',asiento:'entry.5512002',competicion:'entry.598909896',rival:'entry.534357753',gol:'entry.2045603343',tiempo:'entry.1932742544',minuto:'entry.944186831',resultParcial:'entry.1806859390',resultFinal:'entry.913827644',goleador:'entry.1830772877',asistencia:'entry.1019837170',arco:'entry.650829919',piernaDer:'entry.1473249182',piernaIzq:'entry.1284667375',cabeza:'entry.981489079',penal:'entry.1932105003',tiroli:'entry.1459944140',contexto:'entry.870335260',resultadoFin:'entry.431827316',acompanante:'entry.448279616',clima:'entry.722063818',poleraEquipo:'entry.209406813',poleraAgu:'entry.288128809'};
+const EG={fecha:'entry.56111708',hora:'entry.364341672',presencial:'entry.1844214041',tribuna:'entry.414281671',asiento:'entry.5512002',competicion:'entry.598909896',rival:'entry.534357753',gol:'entry.2045603343',tiempo:'entry.1932742544',minuto:'entry.944186831',resultParcial:'entry.1806859390',resultFinal:'entry.913827644',goleador:'entry.1830772877',asistencia:'entry.1019837170',arco:'entry.650829919',piernaDer:'entry.1473249182',piernaIzq:'entry.1284667375',cabeza:'entry.981489079',penal:'entry.1932105003',tiroli:'entry.1459944140',contexto:'entry.870335260',resultadoFin:'entry.431827316',acompanante:'entry.448279616',clima:'entry.722063818',poleraEquipo:'entry.209406813',poleraAgu:'entry.288128809',rebote:'entry.1749160600'};
 
 const CLARO_LAT=-33.3983,CLARO_LON=-70.5714;
 
@@ -616,7 +616,7 @@ async function importarPartido(){
         const asistencia=ev.strAssist?.trim().split(' ').slice(-1)[0]||'N/A';
         const minuto=String(ev.intTime||0);
         const tiempo=parseInt(ev.intTime||0)<=45?'1er Tiempo':'2do Tiempo';
-        goles.push({tipo,minuto,tiempo,goleador,asistencia,arco:'',piernaDer:'No',piernaIzq:'No',cabeza:'No',penal:ev.strTimelineDetail==='Penalty'?'Sí':'No',tiroli:'No',contexto:'',resultParcial:''});
+        goles.push({tipo,minuto,tiempo,goleador,asistencia,arco:'',piernaDer:'No',piernaIzq:'No',cabeza:'No',penal:ev.strTimelineDetail==='Penalty'?'Sí':'No',tiroli:'No',rebote:'No',contexto:'',resultParcial:''});
       });
       renderGoles();actualizarMarcador();
       document.getElementById('golesImportadosWrap').style.display='block';
@@ -766,7 +766,7 @@ function guardarGol(){
   const goleador=v('golGoleadorCustom')||chipSelections['goleador']||'';if(!goleador){showNotif('Ingresa el goleador','err');return;}
   const asistencia=v('golAsistenciaCustom')||chipSelections['asistencia']||'N/A';
   const pierna=chipSelections['pierna']||'';
-  goles.push({tipo:tipoGolActual,minuto:min,tiempo:document.getElementById('golTiempo').value,goleador,asistencia,arco:chipSelections['arco']||'',piernaDer:pierna==='🦵 Pie derecho'?'Sí':'No',piernaIzq:pierna==='🦵 Pie izquierdo'?'Sí':'No',cabeza:chipSelections['cabeza']==='🗣️ Cabeza'?'Sí':'No',penal:chipSelections['penal']==='📍 Penal'?'Sí':'No',tiroli:chipSelections['libre']==='🎯 Tiro Libre'?'Sí':'No',contexto:chipSelections['contexto']||'',resultParcial:v('golResultadoParcial')});
+  goles.push({tipo:tipoGolActual,minuto:min,tiempo:document.getElementById('golTiempo').value,goleador,asistencia,arco:chipSelections['arco']||'',piernaDer:pierna==='🦵 Pie derecho'?'Sí':'No',piernaIzq:pierna==='🦵 Pie izquierdo'?'Sí':'No',cabeza:chipSelections['cabeza']==='🗣️ Cabeza'?'Sí':'No',penal:chipSelections['penal']==='📍 Penal'?'Sí':'No',tiroli:chipSelections['libre']==='🎯 Tiro Libre'?'Sí':'No',rebote:chipSelections['rebote']==='🔄 Rebote'?'Sí':'No',contexto:chipSelections['contexto']||'',resultParcial:v('golResultadoParcial')});
   cerrarModal();renderGoles();actualizarMarcador();showNotif('Gol registrado ✓','ok');
 }
 function renderGoles(){
@@ -818,7 +818,7 @@ async function enviarTodo(){
     setStatus('statusGoles','loading','⏳',`Enviando ${goles.length} goles...`);
     let errores=0;
     for(const g of goles){
-      try{await submitForm(FORM_GOLES_ID,{[EG.fecha]:fecha,[EG.hora]:hora,[EG.presencial]:ctx.presencial,[EG.tribuna]:ctx.tribuna,[EG.asiento]:ctx.asiento,[EG.competicion]:ctx.competicion,[EG.rival]:ctx.rival,[EG.gol]:g.tipo==='favor'?'A favor':'En Contra',[EG.tiempo]:g.tiempo,[EG.minuto]:g.minuto,[EG.resultParcial]:g.resultParcial||ctx.marcador,[EG.resultFinal]:ctx.marcador,[EG.goleador]:g.goleador,[EG.asistencia]:g.asistencia,[EG.arco]:g.arco,[EG.piernaDer]:g.piernaDer,[EG.piernaIzq]:g.piernaIzq,[EG.cabeza]:g.cabeza,[EG.penal]:g.penal,[EG.tiroli]:g.tiroli,[EG.contexto]:g.contexto,[EG.resultadoFin]:ctx.resultado,[EG.acompanante]:ctx.acompanante,[EG.clima]:ctx.clima,[EG.poleraEquipo]:ctx.poleraEquipo,[EG.poleraAgu]:ctx.poleraAgu});await new Promise(r=>setTimeout(r,400));}
+      try{await submitForm(FORM_GOLES_ID,{[EG.fecha]:fecha,[EG.hora]:hora,[EG.presencial]:ctx.presencial,[EG.tribuna]:ctx.tribuna,[EG.asiento]:ctx.asiento,[EG.competicion]:ctx.competicion,[EG.rival]:ctx.rival,[EG.gol]:g.tipo==='favor'?'A favor':'En Contra',[EG.tiempo]:g.tiempo,[EG.minuto]:g.minuto,[EG.resultParcial]:g.resultParcial||ctx.marcador,[EG.resultFinal]:ctx.marcador,[EG.goleador]:g.goleador,[EG.asistencia]:g.asistencia,[EG.arco]:g.arco,[EG.piernaDer]:g.piernaDer,[EG.piernaIzq]:g.piernaIzq,[EG.cabeza]:g.cabeza,[EG.penal]:g.penal,[EG.tiroli]:g.tiroli,[EG.rebote]:g.rebote,[EG.contexto]:g.contexto,[EG.resultadoFin]:ctx.resultado,[EG.acompanante]:ctx.acompanante,[EG.clima]:ctx.clima,[EG.poleraEquipo]:ctx.poleraEquipo,[EG.poleraAgu]:ctx.poleraAgu});await new Promise(r=>setTimeout(r,400));}
       catch(e){errores++;}
     }
     setStatus('statusGoles',errores===0?'success':'error',errores===0?'✅':'⚠️',errores===0?`${goles.length} goles enviados`:`${goles.length-errores}/${goles.length} enviados`);
