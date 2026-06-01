@@ -413,7 +413,7 @@
 // CONFIG
 // ============================================================
 const API_KEY = 'a313a1c74bb22db78202389894d5ad02';
-const API_HOST = 'v3.football.api-sports.io';
+const API_HOST = 'api-football-v1.p.rapidapi.com';
 let UC_TEAM_ID = 2994; // Universidad Católica Chile
 // League IDs: 265=Primera División Chile, 11=Copa Chile, 13=Copa Libertadores, 11=Sudamericana
 const LEAGUE_IDS = { 'Campeonato Nacional':265, 'Copa Libertadores':13, 'Copa Sudamericana':11, 'Copa Chile':242 };
@@ -460,10 +460,10 @@ let fixtureSeleccionado=null;
 // API-FOOTBALL
 // ============================================================
 async function apiFootball(endpoint) {
-  const resp = await fetch(`https://${API_HOST}/${endpoint}`, {
+  const resp = await fetch(`https://api-football-v1.p.rapidapi.com/v3/${endpoint}`, {
     headers: {
-      'x-rapidapi-key': API_KEY,
-      'x-rapidapi-host': API_HOST
+      'X-RapidAPI-Key': API_KEY,
+      'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
     }
   });
   if(!resp.ok) throw new Error(`API error: ${resp.status}`);
