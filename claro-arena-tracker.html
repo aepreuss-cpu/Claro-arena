@@ -267,9 +267,7 @@
           <div class="chip-color blanco" onclick="selectColor(this,'colorEquipo','Blanca')" title="Blanca"></div>
           <div class="chip-color azul" onclick="selectColor(this,'colorEquipo','Azul')" title="Azul"></div>
           <div class="chip-color rojo" onclick="selectColor(this,'colorEquipo','Roja')" title="Roja"></div>
-          <div class="chip-color negro" onclick="selectColor(this,'colorEquipo','Negra')" title="Negra"></div>
-          <div class="chip-color celeste" onclick="selectColor(this,'colorEquipo','Celeste')" title="Celeste"></div>
-          <div class="chip-color amarillo" onclick="selectColor(this,'colorEquipo','Amarilla')" title="Amarilla"></div>
+
         </div>
         <div class="sublabel">Marca</div>
         <div class="chip-group" id="marcaEquipoGroup" style="margin-bottom:8px;">
@@ -299,9 +297,7 @@
           <div class="chip-color blanco" onclick="selectColor(this,'colorAgu','Blanca')" title="Blanca"></div>
           <div class="chip-color azul" onclick="selectColor(this,'colorAgu','Azul')" title="Azul"></div>
           <div class="chip-color rojo" onclick="selectColor(this,'colorAgu','Roja')" title="Roja"></div>
-          <div class="chip-color negro" onclick="selectColor(this,'colorAgu','Negra')" title="Negra"></div>
-          <div class="chip-color celeste" onclick="selectColor(this,'colorAgu','Celeste')" title="Celeste"></div>
-          <div class="chip-color amarillo" onclick="selectColor(this,'colorAgu','Amarilla')" title="Amarilla"></div>
+
         </div>
         <div class="sublabel">Marca</div>
         <div class="chip-group" id="marcaAguGroup" style="margin-bottom:8px;">
@@ -475,20 +471,29 @@ async function buscarPartidos(){
   setBuscarStatus('loading','🔍 Buscando partidos de UC...');
   document.getElementById('fixtureList').innerHTML='';
   try{
-    const resp=await fetch(`${TSDB_BASE}/eventslast.php?id=${UC_TEAM_ID}`);
-    const data=await resp.json();
-    const next=await fetch(`${TSDB_BASE}/eventsnext.php?id=${UC_TEAM_ID}`);
-    const dataNext=await next.json();
-    const todos=[...(data.results||[]),...(dataNext.events||[])];
-    const filtrados=todos.filter(f=>f.dateEvent===fecha);
+    const año=fecha.substring(0,4);
+    const [respLast,respNext,respSearch]=await Promise.allSettled([
+      fetch(`${TSDB_BASE}/eventslast.php?id=${UC_TEAM_ID}`).then(r=>r.json()),
+      fetch(`${TSDB_BASE}/eventsnext.php?id=${UC_TEAM_ID}`).then(r=>r.json()),
+      fetch(`${TSDB_BASE}/searchevents.php?e=Universidad+Católica&s=${año}`).then(r=>r.json()),
+    ]);
+    const todos=[
+      ...(respLast.status==='fulfilled'?respLast.value.results||[]:[] ),
+      ...(respNext.status==='fulfilled'?respNext.value.events||[]:[] ),
+      ...(respSearch.status==='fulfilled'?respSearch.value.event||[]:[] ),
+    ];
+    const vistos=new Set();
+    const filtrados=todos.filter(f=>{
+      if(f.dateEvent!==fecha)return false;
+      if(vistos.has(f.idEvent))return false;
+      vistos.add(f.idEvent);
+      return true;
+    });
     if(filtrados.length===0){
-      // Buscar por fecha en los últimos/próximos eventos
-      const todos5=[...(data.results||[]),...(dataNext.events||[])];
-      if(todos5.length>0){
-        setBuscarStatus('err',`No hay partido el ${fecha}. Últimos: ${todos5.map(f=>f.dateEvent).join(', ')}`);
-      } else {
-        setBuscarStatus('err','No se encontraron partidos');
-      }
+      const fechasDisp=[...new Set(todos.map(f=>f.dateEvent))].sort().slice(-6);
+      setBuscarStatus('err',fechasDisp.length>0
+        ?`No hay partido el ${fecha}. Fechas disponibles: ${fechasDisp.join(', ')}`
+        :'No se encontraron partidos');
       return;
     }
     setBuscarStatus('ok',`${filtrados.length} partido(s) encontrado(s)`);
@@ -496,7 +501,7 @@ async function buscarPartidos(){
     filtrados.forEach(f=>{
       const hs=f.intHomeScore??'?';
       const as_=f.intAwayScore??'?';
-      const fin=f.strStatus==='FT';
+      const fin=f.strStatus==='FT'||f.strStatus==='AET';
       const el=document.createElement('div');
       el.className='fixture-item';
       el.innerHTML=`<span class="fixture-score">${fin?hs+'-'+as_:'—'}</span><div class="fixture-teams">${f.strHomeTeam} vs ${f.strAwayTeam}</div><div class="fixture-meta">${f.strLeague} · ${f.strStatus}</div>`;
