@@ -414,7 +414,7 @@
 // ============================================================
 const API_KEY = 'a313a1c74bb22db78202389894d5ad02';
 const API_HOST = 'v3.football.api-sports.io';
-let UC_TEAM_ID = 1954; // Se actualiza automáticamente al buscar
+let UC_TEAM_ID = 2994; // Universidad Católica Chile
 // League IDs: 265=Primera División Chile, 11=Copa Chile, 13=Copa Libertadores, 11=Sudamericana
 const LEAGUE_IDS = { 'Campeonato Nacional':265, 'Copa Libertadores':13, 'Copa Sudamericana':11, 'Copa Chile':242 };
 
@@ -478,33 +478,6 @@ async function buscarPartidos() {
   document.getElementById('fixtureList').innerHTML = '';
 
   try {
-    // Si no tenemos el team ID correcto, buscarlo primero
-    if(UC_TEAM_ID === 1954) {
-      setBuscarStatus('loading','🔍 Buscando equipo en la base de datos...');
-      try {
-        const teamData = await apiFootball(`teams?name=Universidad%20Cat%C3%B3lica&country=Chile`);
-        const teams = teamData.response || [];
-        if(teams.length > 0) {
-          UC_TEAM_ID = teams[0].team.id;
-        }
-      } catch(e) {
-        // Si falla, probar IDs conocidos
-        for(const id of [1954, 1953, 2289, 2290, 2291]) {
-          try {
-            const test = await apiFootball(`fixtures?team=${id}&season=2026&last=1`);
-            if(test.response && test.response.length > 0) {
-              const teamName = test.response[0].teams.home.name + test.response[0].teams.away.name;
-              if(teamName.toLowerCase().includes('cat') || teamName.toLowerCase().includes('cruzado')) {
-                UC_TEAM_ID = id;
-                break;
-              }
-            }
-          } catch(e2) {}
-        }
-      }
-    }
-
-    setBuscarStatus('loading',`🔍 Buscando partidos (Team ID: ${UC_TEAM_ID})...`);
     const data = await apiFootball(`fixtures?team=${UC_TEAM_ID}&date=${fecha}`);
     const fixtures = data.response || [];
 
