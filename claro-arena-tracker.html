@@ -460,10 +460,9 @@ let fixtureSeleccionado=null;
 // API-FOOTBALL
 // ============================================================
 async function apiFootball(endpoint) {
-  const resp = await fetch(`https://api-football-v1.p.rapidapi.com/v3/${endpoint}`, {
+  const resp = await fetch(`https://v3.football.api-sports.io/${endpoint}`, {
     headers: {
-      'X-RapidAPI-Key': API_KEY,
-      'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
+      'x-apisports-key': API_KEY
     }
   });
   if(!resp.ok) throw new Error(`API error: ${resp.status}`);
