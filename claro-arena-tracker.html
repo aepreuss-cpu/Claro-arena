@@ -236,13 +236,42 @@
           <div class="chip" onclick="selectChip(this,'tribuna')">Prieto Alto</div>
           <div class="chip" onclick="selectChip(this,'tribuna')">Livingstone</div>
         </div>
-        <div class="field mb0"><label>Asiento</label><input type="text" id="asiento" value="P61"></div>
+        <div class="field"><label>Asiento</label><input type="text" id="asiento" value="P61"></div>
+        <div class="field mb0"><label>Acompañante</label><input type="text" id="acompanante" placeholder="Nombre Apellido, N/A"></div>
+        <div class="sep" style="margin:10px 0;"></div>
+        <!-- POLERA AGUSTÍN -->
+        <div class="field mb0">
+          <label>Polera Agustín</label>
+          <div class="sublabel">Color</div>
+          <div class="color-group" id="colorAguGroup">
+            <div class="chip-color blanco" onclick="selectColor(this,'colorAgu','Blanca')" title="Blanca"></div>
+            <div class="chip-color azul" onclick="selectColor(this,'colorAgu','Azul')" title="Azul"></div>
+            <div class="chip-color rojo" onclick="selectColor(this,'colorAgu','Roja')" title="Roja"></div>
+          </div>
+          <div class="sublabel">Marca</div>
+          <div class="chip-group" id="marcaAguGroup" style="margin-bottom:8px;">
+            <div class="chip" onclick="selectChip(this,'marcaAgu')">Puma</div>
+            <div class="chip" onclick="selectChip(this,'marcaAgu')">Nike</div>
+            <div class="chip" onclick="selectChip(this,'marcaAgu')">Adidas</div>
+            <div class="chip" onclick="selectChip(this,'marcaAgu')">Under Armour</div>
+            <div class="chip" onclick="selectChip(this,'marcaAgu')">Umbro</div>
+          </div>
+          <div class="sublabel">Versión</div>
+          <div class="chip-group" id="versionAguGroup" style="margin-bottom:8px;">
+            <div class="chip" onclick="selectChip(this,'versionAgu')">Edición Claro Arena</div>
+            <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2026</div>
+            <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2025</div>
+            <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2024</div>
+            <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2022</div>
+            <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2021</div>
+          </div>
+          <input type="text" id="poleraAguCustom" placeholder="O escribe la versión manualmente..." style="background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;width:100%;">
+        </div>
       </div>
     </div>
 
     <div class="card">
       <div class="card-label">Tu info</div>
-      <div class="field"><label>Acompañante</label><input type="text" id="acompanante" placeholder="Nombre Apellido, N/A"></div>
 
       <!-- CLIMA AUTO -->
       <div class="field">
@@ -289,36 +318,6 @@
         <input type="text" id="poleraEquipoCustom" placeholder="O escribe la versión manualmente..." style="background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;width:100%;">
       </div>
 
-      <!-- POLERA AGUSTÍN -->
-      <div class="field mb0">
-        <label>Polera Agustín</label>
-        <div class="sublabel">Color</div>
-        <div class="color-group" id="colorAguGroup">
-          <div class="chip-color blanco" onclick="selectColor(this,'colorAgu','Blanca')" title="Blanca"></div>
-          <div class="chip-color azul" onclick="selectColor(this,'colorAgu','Azul')" title="Azul"></div>
-          <div class="chip-color rojo" onclick="selectColor(this,'colorAgu','Roja')" title="Roja"></div>
-
-        </div>
-        <div class="sublabel">Marca</div>
-        <div class="chip-group" id="marcaAguGroup" style="margin-bottom:8px;">
-          <div class="chip" onclick="selectChip(this,'marcaAgu')">Puma</div>
-          <div class="chip" onclick="selectChip(this,'marcaAgu')">Nike</div>
-          <div class="chip" onclick="selectChip(this,'marcaAgu')">Adidas</div>
-          <div class="chip" onclick="selectChip(this,'marcaAgu')">Under Armour</div>
-          <div class="chip" onclick="selectChip(this,'marcaAgu')">Umbro</div>
-        </div>
-        <div class="sublabel">Versión</div>
-        <div class="chip-group" id="versionAguGroup" style="margin-bottom:8px;">
-          <div class="chip" onclick="selectChip(this,'versionAgu')">Edición Claro Arena</div>
-          <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2026</div>
-          <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2025</div>
-          <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2024</div>
-          <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2022</div>
-          <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2021</div>
-          <div class="chip" onclick="selectChip(this,'versionAgu')">N/A</div>
-        </div>
-        <input type="text" id="poleraAguCustom" placeholder="O escribe la versión manualmente..." style="background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;width:100%;">
-      </div>
     </div>
 
     <div class="card">
@@ -570,6 +569,8 @@ async function importarPartido(){
     const linData=await linResp.json();
     const lineup=linData.lineup||[];
     const ucPlayers=lineup.filter(p=>p.idTeam===UC_TEAM_ID);
+    // Ordenar: arquero primero, luego por posicion
+    const posOrd={"Goalkeeper":0,"Keeper":0,"GK":0,"Centre-Back":1,"Right-Back":1,"Left-Back":1,"Defender":1,"Central Midfield":2,"Defensive Midfield":2,"Attacking Midfield":2,"Right Midfield":2,"Left Midfield":2,"Midfielder":2,"Right Winger":3,"Left Winger":3,"Centre-Forward":3,"Forward":3,"Striker":3};
     const titulares=ucPlayers.filter(p=>p.strSubstitute==='No');
     const suplentes=ucPlayers.filter(p=>p.strSubstitute==='Yes');
     if(titulares.length>0){
@@ -778,7 +779,7 @@ function eliminarGol(i){goles.splice(i,1);renderGoles();actualizarMarcador();sho
 function generarResumen(){
   const climaFinal=climaValorFinal||v('clima');
   const poleraEquipo=getPoleraString('colorEquipo','marcaEquipo','versionEquipo','poleraEquipoCustom');
-  const poleraAgu=getPoleraString('colorAgu','marcaAgu','versionAgu','poleraAguCustom')||'N/A';
+  const poleraAgu=presencial?getPoleraString('colorAgu','marcaAgu','versionAgu','poleraAguCustom')||'N/A':'N/A';
   const rows=[['Fecha',v('fecha')],['Hora',v('hora')],['Competición',v('competicion')],['Rival',v('rival')],['Marcador',v('resultadoTexto')],['Resultado',resultadoSeleccionado],['Presencial',presencial?'Sí':'No'],presencial?['Tribuna',tribunaSeleccionada]:null,presencial?['Asiento',v('asiento')]:null,['Acompañante',v('acompanante')],['Clima',climaFinal],['Polera Equipo',poleraEquipo],['Polera Agustín',poleraAgu]].filter(Boolean);
   document.getElementById('resumenPartido').innerHTML=rows.map(([k,val])=>`<div class="resumen-row"><span class="resumen-key">${k}</span><span class="resumen-val">${val||'—'}</span></div>`).join('');
   const rg=document.getElementById('resumenGoles');
@@ -796,8 +797,8 @@ async function enviarTodo(){
   document.getElementById('statusBar').classList.add('visible');
   const fecha=v('fecha'),hora=v('hora'),climaFinal=climaValorFinal||v('clima');
   const poleraEquipo=getPoleraString('colorEquipo','marcaEquipo','versionEquipo','poleraEquipoCustom');
-  const poleraAgu=getPoleraString('colorAgu','marcaAgu','versionAgu','poleraAguCustom')||'N/A';
-  const ctx={presencial:presencial?'Sí':'No',tribuna:presencial?tribunaSeleccionada:'No presencial',asiento:presencial?v('asiento'):'No Presencial',competicion:v('competicion'),rival:v('rival'),marcador:v('resultadoTexto'),resultado:resultadoSeleccionado,acompanante:v('acompanante')||'N/A',clima:climaFinal,poleraEquipo,poleraAgu};
+  const poleraAgu=presencial?getPoleraString('colorAgu','marcaAgu','versionAgu','poleraAguCustom')||'N/A':'N/A';
+  const ctx={presencial:presencial?'Sí':'No',tribuna:presencial?tribunaSeleccionada:'No presencial',asiento:presencial?v('asiento'):'No Presencial',competicion:v('competicion'),rival:v('rival'),marcador:v('resultadoTexto'),resultado:resultadoSeleccionado,acompanante:presencial?v('acompanante')||'N/A':'N/A',clima:climaFinal,poleraEquipo,poleraAgu};
 
   setStatus('statusPartido','loading','⏳','Enviando partido...');
   try{
