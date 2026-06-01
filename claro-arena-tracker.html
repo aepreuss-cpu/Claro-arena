@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claro Arena Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -336,6 +337,12 @@
 
     <div class="card">
       <div class="card-label">Alineación <span class="tag-verde" id="aliTag" style="display:none;">Importada</span></div>
+      <div class="field" style="margin-bottom:14px;">
+        <label>📋 Pegar alineación rápida</label>
+        <textarea id="alineacionTexto" rows="2" placeholder="Ej: Dituro, Aued, Fuentes, Velásquez, Parot, Zárate, Soto, Giani, Zampedri, Aravena, Pino" style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 13px;resize:vertical;"></textarea>
+        <button onclick="parsearAlineacion()" style="margin-top:6px;width:100%;padding:9px;background:#1A2540;color:var(--azul-claro);border:1px solid var(--azul-claro);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">↓ Distribuir en campos</button>
+        <div class="hint">Separa los jugadores por coma o salto de línea. El primero será el arquero.</div>
+      </div>
       <div class="alineacion-title">Arquero</div>
       <div class="field mb0"><input type="text" id="jug1" placeholder="Arquero" style="font-size:14px;"></div>
       <div class="alineacion-title" style="margin-top:10px;">Jugadores (2–11)</div>
@@ -842,8 +849,54 @@ function nuevoPartido(){
   document.getElementById('climaAutoBox').style.display='none';document.getElementById('climaTag').style.display='none';
   document.getElementById('aliTag').style.display='none';
   resetImport();
-  document.getElementById('fecha').valueAsDate=new Date();
+  function parsearAlineacion(){
+  const texto=document.getElementById('alineacionTexto').value.trim();
+  if(!texto){showNotif('Pega la alineación primero','err');return;}
+  // Separar por coma, punto y coma, salto de línea o numeración (1. Nombre)
+  const jugadores=texto
+    .split(/[,;
+]+/)
+    .map(j=>j.replace(/^\d+[\.\-\)]\s*/,'').trim()) // quitar numeración
+    .filter(Boolean);
+  if(jugadores.length<1){showNotif('No se reconocieron jugadores','err');return;}
+  // Limpiar campos primero
+  for(let i=1;i<=11;i++) document.getElementById('jug'+i).value='';
+  jugadores.slice(0,11).forEach((j,i)=>{
+    document.getElementById('jug'+(i+1)).value=j;
+  });
+  // Si hay más de 11, van a cambios
+  jugadores.slice(11,16).forEach((j,i)=>{
+    document.getElementById('cam'+(i+1)).value=j;
+  });
+  showNotif(`✓ ${Math.min(jugadores.length,11)} jugadores distribuidos`,'ok');
+  document.getElementById('alineacionTexto').value='';
+}
+
+document.getElementById('fecha').valueAsDate=new Date();
   goStep(1);
+}
+
+function parsearAlineacion(){
+  const texto=document.getElementById('alineacionTexto').value.trim();
+  if(!texto){showNotif('Pega la alineación primero','err');return;}
+  // Separar por coma, punto y coma, salto de línea o numeración (1. Nombre)
+  const jugadores=texto
+    .split(/[,;
+]+/)
+    .map(j=>j.replace(/^\d+[\.\-\)]\s*/,'').trim()) // quitar numeración
+    .filter(Boolean);
+  if(jugadores.length<1){showNotif('No se reconocieron jugadores','err');return;}
+  // Limpiar campos primero
+  for(let i=1;i<=11;i++) document.getElementById('jug'+i).value='';
+  jugadores.slice(0,11).forEach((j,i)=>{
+    document.getElementById('jug'+(i+1)).value=j;
+  });
+  // Si hay más de 11, van a cambios
+  jugadores.slice(11,16).forEach((j,i)=>{
+    document.getElementById('cam'+(i+1)).value=j;
+  });
+  showNotif(`✓ ${Math.min(jugadores.length,11)} jugadores distribuidos`,'ok');
+  document.getElementById('alineacionTexto').value='';
 }
 
 document.getElementById('fecha').valueAsDate=new Date();
