@@ -6,11 +6,7 @@
 <title>Claro Arena Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --azul:#1A4A9E;--azul-claro:#4A7BD4;--rojo:#C8102E;
-    --fondo:#0D1526;--card:#111827;--card-border:#1E2D4A;
-    --gris:#6B7A99;--texto:#E8EDF5;--verde:#0F7A3C;
-  }
+  :root{--azul:#1A4A9E;--azul-claro:#4A7BD4;--rojo:#C8102E;--fondo:#0D1526;--card:#111827;--card-border:#1E2D4A;--gris:#6B7A99;--texto:#E8EDF5;--verde:#0F7A3C;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--fondo);color:var(--texto);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
   .header{background:var(--azul);padding:0 20px;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:100;overflow:hidden;}
@@ -43,15 +39,9 @@
   .chip{padding:6px 13px;border-radius:20px;border:1px solid var(--card-border);background:#080E1C;color:var(--gris);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.15s;user-select:none;}
   .chip:hover{border-color:var(--azul-claro);color:var(--texto);}
   .chip.selected{background:var(--azul);border-color:var(--azul-claro);color:white;font-weight:600;}
-  /* Color chips */
   .chip-color{width:32px;height:32px;border-radius:50%;border:2px solid #333;cursor:pointer;transition:all 0.15s;flex-shrink:0;}
   .chip-color.selected{border-color:white;transform:scale(1.15);}
-  .chip-color.blanco{background:white;}
-  .chip-color.azul{background:#1A4A9E;}
-  .chip-color.rojo{background:#C8102E;}
-  .chip-color.negro{background:#111;}
-  .chip-color.celeste{background:#7AAAF0;}
-  .chip-color.amarillo{background:#F5C842;}
+  .chip-color.blanco{background:white;}.chip-color.azul{background:#1A4A9E;}.chip-color.rojo{background:#C8102E;}
   .color-group{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;margin-bottom:10px;}
   .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--card-border);}
   .toggle-row:last-child{border-bottom:none;}
@@ -74,6 +64,8 @@
   .gol-min{font-family:'Bebas Neue',cursive;font-size:26px;color:var(--azul-claro);min-width:44px;line-height:1;}
   .gol-min.en-contra{color:#FF6680;}
   .gol-info{flex:1;}.gol-nombre{font-size:14px;font-weight:600;}.gol-detalle{font-size:11px;color:var(--gris);margin-top:2px;}
+  .gol-actions{display:flex;gap:6px;}
+  .gol-edit{background:none;border:none;color:var(--azul-claro);cursor:pointer;font-size:15px;padding:4px;transition:color 0.15s;}
   .gol-delete{background:none;border:none;color:#1E2D4A;cursor:pointer;font-size:17px;padding:4px;transition:color 0.15s;}
   .gol-delete:hover{color:var(--rojo);}
   .gol-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;}
@@ -90,31 +82,29 @@
   @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
   .modal-title{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;color:var(--azul-claro);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;}
   .modal-close{background:#1A2540;border:none;color:var(--gris);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
-  .jugadores-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:6px;}
-  .jugador-chip{padding:8px 10px;border-radius:8px;border:1px solid var(--card-border);background:#080E1C;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all 0.15s;text-align:center;word-break:break-word;}
-  .jugador-chip:hover{border-color:var(--azul-claro);}
-  .jugador-chip.selected{background:var(--azul);border-color:var(--azul-claro);font-weight:600;}
-  .partido-resumen{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:12px;margin-bottom:14px;}
-  .resumen-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1A2540;font-size:13px;}
-  .resumen-row:last-child{border-bottom:none;}
-  .resumen-key{color:var(--gris);}.resumen-val{color:var(--texto);font-weight:500;text-align:right;max-width:60%;}
+  /* PLAYER SEARCH */
+  .player-search-wrap{position:relative;margin-bottom:8px;}
+  .player-search{width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:14px;padding:9px 13px;}
+  .player-search:focus{outline:none;border-color:var(--azul-claro);}
+  .player-dropdown{position:absolute;top:100%;left:0;right:0;background:#111827;border:1px solid var(--azul-claro);border-radius:8px;z-index:50;max-height:180px;overflow-y:auto;display:none;}
+  .player-dropdown.open{display:block;}
+  .player-option{padding:9px 13px;cursor:pointer;font-size:13px;border-bottom:1px solid #1E2D4A;transition:background 0.1s;}
+  .player-option:hover{background:rgba(26,74,158,0.2);}
+  .player-option:last-child{border-bottom:none;}
+  /* STATUS */
   .status-bar{background:var(--card);border-radius:10px;padding:12px;margin-top:12px;display:none;}
   .status-bar.visible{display:block;}
   .status-item{display:flex;align-items:center;gap:10px;padding:5px 0;}
   .status-icon{font-size:15px;min-width:20px;text-align:center;}
   .status-text{font-size:13px;color:var(--gris);}
   .status-text.success{color:#4ACA7A;}.status-text.error{color:#FF6680;}.status-text.loading{color:#F0C040;}
-  .resultado-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-  .res-btn{padding:10px 6px;border-radius:8px;border:1px solid var(--card-border);background:#080E1C;color:var(--gris);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.15s;}
-  .res-btn.triunfo.selected{background:var(--verde);border-color:#2AAA5A;color:white;}
-  .res-btn.empate.selected{background:#2A3A5A;border-color:var(--azul-claro);color:white;}
-  .res-btn.derrota.selected{background:#6A0A1A;border-color:var(--rojo);color:white;}
-  .alineacion-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--azul-claro);font-weight:700;margin-bottom:8px;margin-top:12px;opacity:0.8;}
-  .alineacion-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
-  .ali-field{background:#080E1C;border:1px solid var(--card-border);border-radius:8px;padding:7px 10px;display:flex;align-items:center;gap:7px;}
-  .ali-num{font-family:'Bebas Neue',cursive;font-size:14px;color:var(--azul-claro);min-width:16px;opacity:0.7;}
-  .ali-input{background:none!important;border:none!important;padding:0!important;font-size:13px!important;color:var(--texto)!important;width:100%;font-family:'DM Sans',sans-serif;}
-  .ali-input:focus{outline:none;}
+  /* RETRY BUTTONS */
+  .retry-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+  .btn-retry{padding:11px 8px;background:transparent;color:var(--gris);border:1px solid var(--card-border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;text-align:center;}
+  .btn-retry:hover{border-color:var(--azul-claro);color:var(--texto);}
+  .btn-retry.error-state{border-color:var(--rojo);color:#FF8A9A;}
+  .btn-retry.error-state:hover{background:rgba(200,16,46,0.1);}
+  /* IMPORT */
   .import-box{background:#080E1C;border:1px dashed var(--azul-claro);border-radius:10px;padding:14px;margin-bottom:14px;}
   .import-box-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--azul-claro);margin-bottom:10px;}
   .fixture-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
@@ -135,6 +125,17 @@
   .action-btn:hover{background:#1A3D8A;}.action-btn:disabled{background:#1E2D4A;color:var(--gris);cursor:not-allowed;}
   .action-btn-outline{background:transparent;color:var(--azul-claro);border:1px solid var(--azul-claro);border-radius:8px;padding:9px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;}
   .action-btn-outline:hover{background:rgba(26,74,158,0.2);}
+  .resultado-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .res-btn{padding:10px 6px;border-radius:8px;border:1px solid var(--card-border);background:#080E1C;color:var(--gris);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.15s;}
+  .res-btn.triunfo.selected{background:var(--verde);border-color:#2AAA5A;color:white;}
+  .res-btn.empate.selected{background:#2A3A5A;border-color:var(--azul-claro);color:white;}
+  .res-btn.derrota.selected{background:#6A0A1A;border-color:var(--rojo);color:white;}
+  .alineacion-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--azul-claro);font-weight:700;margin-bottom:8px;margin-top:12px;opacity:0.8;}
+  .alineacion-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+  .partido-resumen{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:12px;margin-bottom:14px;}
+  .resumen-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1A2540;font-size:13px;}
+  .resumen-row:last-child{border-bottom:none;}
+  .resumen-key{color:var(--gris);}.resumen-val{color:var(--texto);font-weight:500;text-align:right;max-width:60%;}
   .success-screen{text-align:center;padding:40px 20px;}
   .success-icon{font-size:60px;margin-bottom:14px;}
   .success-title{font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:2px;color:var(--azul-claro);margin-bottom:8px;}
@@ -237,9 +238,8 @@
           <div class="chip" onclick="selectChip(this,'tribuna')">Livingstone</div>
         </div>
         <div class="field"><label>Asiento</label><input type="text" id="asiento" value="P61"></div>
-        <div class="field mb0"><label>Acompañante</label><input type="text" id="acompanante" placeholder="Nombre Apellido, N/A"></div>
+        <div class="field"><label>Acompañante</label><input type="text" id="acompanante" placeholder="Nombre o N/A"></div>
         <div class="sep" style="margin:10px 0;"></div>
-        <!-- POLERA AGUSTÍN -->
         <div class="field mb0">
           <label>Polera Agustín</label>
           <div class="sublabel">Color</div>
@@ -265,15 +265,13 @@
             <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2022</div>
             <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2021</div>
           </div>
-          <input type="text" id="poleraAguCustom" placeholder="O escribe la versión manualmente..." style="background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;width:100%;">
+          <input type="text" id="poleraAguCustom" placeholder="O escribe manualmente..." style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;">
         </div>
       </div>
     </div>
 
     <div class="card">
       <div class="card-label">Tu info</div>
-
-      <!-- CLIMA AUTO -->
       <div class="field">
         <label>Clima <span class="tag-verde" id="climaTag" style="display:none;">Auto</span></label>
         <div class="clima-auto" id="climaAutoBox" style="display:none;">
@@ -287,8 +285,6 @@
         <button class="action-btn" id="climaBtnObtener" onclick="obtenerClima()" style="width:100%;padding:10px;margin-bottom:8px;">🌡 Obtener clima automático</button>
         <select id="clima"><option value="">— O seleccionar manualmente —</option><option>Despejado</option><option>Nublado</option><option>Lluvia</option><option>Frío</option><option>Calor</option></select>
       </div>
-
-      <!-- POLERA EQUIPO -->
       <div class="field">
         <label>Polera Equipo</label>
         <div class="sublabel">Color</div>
@@ -296,7 +292,6 @@
           <div class="chip-color blanco" onclick="selectColor(this,'colorEquipo','Blanca')" title="Blanca"></div>
           <div class="chip-color azul" onclick="selectColor(this,'colorEquipo','Azul')" title="Azul"></div>
           <div class="chip-color rojo" onclick="selectColor(this,'colorEquipo','Roja')" title="Roja"></div>
-
         </div>
         <div class="sublabel">Marca</div>
         <div class="chip-group" id="marcaEquipoGroup" style="margin-bottom:8px;">
@@ -315,9 +310,8 @@
           <div class="chip" onclick="selectChip(this,'versionEquipo')">Local 2022</div>
           <div class="chip" onclick="selectChip(this,'versionEquipo')">Local 2021</div>
         </div>
-        <input type="text" id="poleraEquipoCustom" placeholder="O escribe la versión manualmente..." style="background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;width:100%;">
+        <input type="text" id="poleraEquipoCustom" placeholder="O escribe manualmente..." style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;">
       </div>
-
     </div>
 
     <div class="card">
@@ -338,33 +332,15 @@
       <div class="card-label">Alineación <span class="tag-verde" id="aliTag" style="display:none;">Importada</span></div>
       <div class="field" style="margin-bottom:14px;">
         <label>📋 Pegar alineación rápida</label>
-        <textarea id="alineacionTexto" rows="2" placeholder="Ej: Dituro, Aued, Fuentes, Velásquez, Parot, Zárate, Soto, Giani, Zampedri, Aravena, Pino" style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 13px;resize:vertical;"></textarea>
+        <textarea id="alineacionTexto" rows="2" placeholder="Ej: Bernedo, González, Ampuero, Mena..." style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 13px;resize:vertical;"></textarea>
         <button onclick="parsearAlineacion()" style="margin-top:6px;width:100%;padding:9px;background:#1A2540;color:var(--azul-claro);border:1px solid var(--azul-claro);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">↓ Distribuir en campos</button>
-        <div class="hint">Separa los jugadores por coma o salto de línea. El primero será el arquero.</div>
       </div>
       <div class="alineacion-title">Arquero</div>
-      <div class="field mb0"><input type="text" id="jug1" placeholder="Arquero" style="font-size:14px;"></div>
+      <div id="posArquero"></div>
       <div class="alineacion-title" style="margin-top:10px;">Jugadores (2–11)</div>
-      <div class="alineacion-grid">
-        <div class="ali-field"><span class="ali-num">2</span><input class="ali-input" id="jug2" type="text" placeholder="Jugador 2"></div>
-        <div class="ali-field"><span class="ali-num">3</span><input class="ali-input" id="jug3" type="text" placeholder="Jugador 3"></div>
-        <div class="ali-field"><span class="ali-num">4</span><input class="ali-input" id="jug4" type="text" placeholder="Jugador 4"></div>
-        <div class="ali-field"><span class="ali-num">5</span><input class="ali-input" id="jug5" type="text" placeholder="Jugador 5"></div>
-        <div class="ali-field"><span class="ali-num">6</span><input class="ali-input" id="jug6" type="text" placeholder="Jugador 6"></div>
-        <div class="ali-field"><span class="ali-num">7</span><input class="ali-input" id="jug7" type="text" placeholder="Jugador 7"></div>
-        <div class="ali-field"><span class="ali-num">8</span><input class="ali-input" id="jug8" type="text" placeholder="Jugador 8"></div>
-        <div class="ali-field"><span class="ali-num">9</span><input class="ali-input" id="jug9" type="text" placeholder="Jugador 9"></div>
-        <div class="ali-field"><span class="ali-num">10</span><input class="ali-input" id="jug10" type="text" placeholder="Jugador 10"></div>
-        <div class="ali-field"><span class="ali-num">11</span><input class="ali-input" id="jug11" type="text" placeholder="Jugador 11"></div>
-      </div>
+      <div class="alineacion-grid" id="posJugadores"></div>
       <div class="alineacion-title" style="margin-top:10px;">Cambios</div>
-      <div class="alineacion-grid">
-        <div class="ali-field"><span class="ali-num">↔</span><input class="ali-input" id="cam1" type="text" placeholder="Cambio 1"></div>
-        <div class="ali-field"><span class="ali-num">↔</span><input class="ali-input" id="cam2" type="text" placeholder="Cambio 2"></div>
-        <div class="ali-field"><span class="ali-num">↔</span><input class="ali-input" id="cam3" type="text" placeholder="Cambio 3"></div>
-        <div class="ali-field"><span class="ali-num">↔</span><input class="ali-input" id="cam4" type="text" placeholder="Cambio 4"></div>
-        <div class="ali-field"><span class="ali-num">↔</span><input class="ali-input" id="cam5" type="text" placeholder="Cambio 5"></div>
-      </div>
+      <div class="alineacion-grid" id="posCambios"></div>
     </div>
     <button class="btn-primary" onclick="irAGoles()">CONTINUAR → GOLES</button>
   </div>
@@ -379,9 +355,8 @@
     </div>
     <div id="golesImportadosWrap" style="display:none;">
       <div class="import-box" style="margin-bottom:14px;">
-        <div class="import-box-title">✅ Goles importados</div>
+        <div class="import-box-title">✅ Goles importados — puedes editarlos abajo ↓</div>
         <div id="golesImportadosLista" style="font-size:12px;color:var(--gris);margin-top:4px;"></div>
-        <div class="hint" style="margin-top:6px;">Puedes editarlos o agregar más abajo ↓</div>
       </div>
     </div>
     <button class="btn-gol favor" onclick="abrirModal('favor')">⚽ + GOL A FAVOR</button>
@@ -401,7 +376,11 @@
       <div class="status-item" id="statusPartido"><span class="status-icon">⏳</span><span class="status-text loading">Enviando partido...</span></div>
       <div class="status-item" id="statusGoles" style="display:none;"><span class="status-icon">⏳</span><span class="status-text loading">Enviando goles...</span></div>
     </div>
-    <button class="btn-primary" id="btnEnviar" onclick="enviarTodo()">⚡ ENVIAR A GOOGLE SHEETS</button>
+    <button class="btn-primary" id="btnEnviar" onclick="enviarTodo()">⚡ ENVIAR TODO A GOOGLE SHEETS</button>
+    <div class="retry-row" id="retryRow" style="display:none;">
+      <button class="btn-retry" id="btnRetryPartido" onclick="reintentarPartido()">↻ Reintentar Partido</button>
+      <button class="btn-retry" id="btnRetryGoles" onclick="reintentarGoles()">↻ Reintentar Goles</button>
+    </div>
     <button class="btn-secondary" onclick="goStep(2)">← Volver</button>
     <div id="successScreen" class="success-screen" style="display:none;">
       <div class="success-icon">🏆</div>
@@ -416,13 +395,40 @@
 <div class="modal-overlay" id="modalGol">
   <div class="modal">
     <div class="modal-title"><span id="modalGolTitle">Agregar Gol</span><button class="modal-close" onclick="cerrarModal()">✕</button></div>
+
+    <!-- AUTOGOL TOGGLE -->
+    <div class="toggle-row" style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--card-border);">
+      <span class="toggle-label">¿Autogol?</span>
+      <div class="toggle" id="toggleAutogol" onclick="toggleAutogol()"></div>
+    </div>
+
     <div class="row2">
       <div class="field"><label>Minuto</label><input type="number" id="golMin" min="1" max="120" placeholder="45"></div>
       <div class="field"><label>Tiempo</label><select id="golTiempo"><option>1er Tiempo</option><option>2do Tiempo</option><option>1er Tiempo Extra</option><option>2do Tiempo Extra</option></select></div>
     </div>
-    <div class="field"><label>Goleador</label><div class="jugadores-grid" id="gridGoleador"></div><input type="text" id="golGoleadorCustom" placeholder="Nombre manual" style="margin-top:8px;"></div>
-    <div class="field"><label>Asistencia</label><div class="jugadores-grid" id="gridAsistencia"></div><input type="text" id="golAsistenciaCustom" placeholder="Nombre manual o N/A" style="margin-top:8px;"></div>
-    <div class="chip-group"><label>Arco</label><div class="chip" onclick="selectChip(this,'arco')">Prieto (Norte)</div><div class="chip" onclick="selectChip(this,'arco')">Lepe (Sur)</div></div>
+
+    <div class="field">
+      <label id="goleadorLabel">Goleador</label>
+      <div class="player-search-wrap">
+        <input type="text" class="player-search" id="golGoleadorSearch" placeholder="Buscar jugador..." oninput="filtrarJugadores('goleador')" onfocus="mostrarDropdown('goleador')" onblur="ocultarDropdown('goleador')">
+        <div class="player-dropdown" id="dropdownGoleador"></div>
+      </div>
+      <input type="text" id="golGoleadorCustom" placeholder="O escribe manualmente" style="margin-top:6px;width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:14px;padding:9px 12px;">
+    </div>
+
+    <div class="field">
+      <label>Asistencia</label>
+      <div class="player-search-wrap">
+        <input type="text" class="player-search" id="golAsistenciaSearch" placeholder="Buscar jugador..." oninput="filtrarJugadores('asistencia')" onfocus="mostrarDropdown('asistencia')" onblur="ocultarDropdown('asistencia')">
+        <div class="player-dropdown" id="dropdownAsistencia"></div>
+      </div>
+      <input type="text" id="golAsistenciaCustom" placeholder="O escribe manualmente / N/A" style="margin-top:6px;width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:14px;padding:9px 12px;">
+    </div>
+
+    <div class="chip-group"><label>Arco</label>
+      <div class="chip" onclick="selectChip(this,'arco')">Prieto (Norte)</div>
+      <div class="chip" onclick="selectChip(this,'arco')">Lepe (Sur)</div>
+    </div>
     <div class="chip-group"><label>Parte del cuerpo</label>
       <div class="chip" onclick="selectChip(this,'cuerpo')">🦵 Pie derecho</div>
       <div class="chip" onclick="selectChip(this,'cuerpo')">🦵 Pie izquierdo</div>
@@ -442,7 +448,7 @@
       <div class="chip" onclick="selectChip(this,'contexto')">Disminuye Ventaja (UC)</div>
     </div>
     <div class="field"><label>Resultado Parcial</label><input type="text" id="golResultadoParcial" placeholder="1-0"></div>
-    <button class="btn-primary" onclick="guardarGol()">✔ GUARDAR GOL</button>
+    <button class="btn-primary" id="btnGuardarGol" onclick="guardarGol()">✔ GUARDAR GOL</button>
   </div>
 </div>
 
@@ -450,25 +456,146 @@
 
 <script>
 // ============================================================
+// PLANTEL UC 2026
+// ============================================================
+const PLANTEL = [
+  'Vicente Bernedo','Darío Melo','Francisco Valdés','Martín Contreras',
+  'Gary Medel','Juan Ignacio Díaz','Eugenio Mena','Daniel González',
+  'Bernardo Cerezo','Sebastián Arancibia','Branco Ampuero','Tomás Asta-Buruaga',
+  'Jeffrey Sekgota','Ignacio Pérez','José Salas','Nicolás L\'Huillier',
+  'Jimmy Martínez','Matías Palavecino','Justo Giani','Jhojan Valencia',
+  'Fernando Zuqui','Alfred Canales','Agustín Farías','Cristián Cuevas',
+  'Bryan González','Vicente Cárcamo','Martín Gómez','Fernando Zampedri',
+  'Diego Valencia','Juan Francisco Rossel','Clemente Montes','Diego Corral'
+];
+
+// ============================================================
 // CONFIG
 // ============================================================
-const UC_TEAM_ID = '137735';
-const TSDB_BASE = 'https://www.thesportsdb.com/api/v1/json/123';
+const UC_TEAM_ID='137735';
+const TSDB_BASE='https://www.thesportsdb.com/api/v1/json/123';
+const CLARO_LAT=-33.3983,CLARO_LON=-70.5714;
 
 const FORM_PARTIDOS_ID='1FAIpQLSfcLNEkUEdHIBdQ8N5-gNPbySydbArg58svb72E4IIgbBxAPA';
 const FORM_GOLES_ID='1FAIpQLSeqVqHsAkvWo-rQH_btZVY0kQWAngFiQbI6gQG1IykAByM07Q';
-const EP={fecha:'entry.56111708',hora:'entry.364341672',presencial:'entry.1844214041',tribuna:'entry.414281671',asiento:'entry.5512002',competicion:'entry.598909896',rival:'entry.534357753',resultMarcador:'entry.913827644',resultado:'entry.431827316',acompanante:'entry.448279616',clima:'entry.722063818',poleraEquipo:'entry.209406813',poleraAgu:'entry.288128809',dt:'entry.1902210398',jug1:'entry.1350269840',jug2:'entry.1398730671',jug3:'entry.2006206749',jug4:'entry.1173345965',jug5:'entry.1806693561',jug6:'entry.1944001311',jug7:'entry.1608364224',jug8:'entry.238964024',jug9:'entry.1368872066',jug10:'entry.1293778777',jug11:'entry.1732850495',cam1:'entry.508667989',cam2:'entry.39261508',cam3:'entry.697109896',cam4:'entry.2132585787',cam5:'entry.1356796343'};
-const EG={fecha:'entry.56111708',hora:'entry.364341672',presencial:'entry.1844214041',tribuna:'entry.414281671',asiento:'entry.5512002',competicion:'entry.598909896',rival:'entry.534357753',gol:'entry.2045603343',tiempo:'entry.1932742544',minuto:'entry.944186831',resultParcial:'entry.1806859390',resultFinal:'entry.913827644',goleador:'entry.1830772877',asistencia:'entry.1019837170',arco:'entry.650829919',piernaDer:'entry.1473249182',piernaIzq:'entry.1284667375',cabeza:'entry.981489079',penal:'entry.1932105003',tiroli:'entry.1459944140',contexto:'entry.870335260',resultadoFin:'entry.431827316',acompanante:'entry.448279616',clima:'entry.722063818',poleraEquipo:'entry.209406813',poleraAgu:'entry.288128809',rebote:'entry.1749160600'};
 
-const CLARO_LAT=-33.3983,CLARO_LON=-70.5714;
+const EP={fecha:'entry.56111708',hora:'entry.364341672',presencial:'entry.1844214041',tribuna:'entry.414281671',asiento:'entry.5512002',competicion:'entry.598909896',rival:'entry.534357753',resultMarcador:'entry.913827644',resultado:'entry.431827316',acompanante:'entry.448279616',clima:'entry.722063818',poleraEquipo:'entry.209406813',poleraAgu:'entry.288128809',dt:'entry.1902210398',jug1:'entry.1350269840',jug2:'entry.1398730671',jug3:'entry.2006206749',jug4:'entry.1173345965',jug5:'entry.1806693561',jug6:'entry.1944001311',jug7:'entry.1608364224',jug8:'entry.238964024',jug9:'entry.1368872066',jug10:'entry.1293778777',jug11:'entry.1732850495',cam1:'entry.508667989',cam2:'entry.39261508',cam3:'entry.697109896',cam4:'entry.2132585787',cam5:'entry.1356796343'};
+const EG={fecha:'entry.56111708',hora:'entry.364341672',presencial:'entry.1844214041',tribuna:'entry.414281671',asiento:'entry.5512002',competicion:'entry.598909896',rival:'entry.534357753',gol:'entry.2045603343',tiempo:'entry.1932742544',minuto:'entry.944186831',resultParcial:'entry.1806859390',resultFinal:'entry.913827644',goleador:'entry.1830772877',asistencia:'entry.1019837170',arco:'entry.650829919',piernaDer:'entry.1473249182',piernaIzq:'entry.1284667375',cabeza:'entry.981489079',penal:'entry.1932105003',tiroli:'entry.1459944140',contexto:'entry.870335260',resultadoFin:'entry.431827316',acompanante:'entry.448279616',clima:'entry.722063818',poleraEquipo:'entry.209406813',poleraAgu:'entry.288128809',rebote:'entry.1749160600',autogol:'entry.110516476'};
 
 // ============================================================
 // ESTADO
 // ============================================================
 let presencial=false,tribunaSeleccionada='',resultadoSeleccionado='';
 let tipoGolActual='',goles=[],chipSelections={},climaValorFinal='';
-let fixtureSeleccionado=null;
 let colorSelections={colorEquipo:'',colorAgu:''};
+let fixtureSeleccionado=null;
+let esAutogol=false;
+let editandoGolIdx=-1;
+let lastCtx=null; // para reintentos
+
+// Inputs alineación dinámicos
+const jugInputs=[]; // jug1..jug11
+const camInputs=[]; // cam1..cam5
+
+// ============================================================
+// BUILD ALINEACION INPUTS
+// ============================================================
+function buildAlineacionInputs(){
+  // Arquero
+  const arqueroWrap=document.getElementById('posArquero');
+  arqueroWrap.innerHTML='';
+  const w=document.createElement('div');
+  w.style.marginBottom='8px';
+  w.innerHTML=buildPlayerSearchHTML('jug1','Arquero');
+  arqueroWrap.appendChild(w);
+
+  // Jugadores 2-11
+  const jugGrid=document.getElementById('posJugadores');
+  jugGrid.innerHTML='';
+  for(let i=2;i<=11;i++){
+    const cell=document.createElement('div');
+    cell.style.background='#080E1C';
+    cell.style.border='1px solid var(--card-border)';
+    cell.style.borderRadius='8px';
+    cell.style.padding='6px 8px';
+    cell.innerHTML=`<div style="font-family:'Bebas Neue',cursive;font-size:13px;color:var(--azul-claro);opacity:0.7;margin-bottom:4px;">${i}</div>`+buildPlayerSearchHTML('jug'+i,'Jugador '+i);
+    jugGrid.appendChild(cell);
+  }
+
+  // Cambios
+  const camGrid=document.getElementById('posCambios');
+  camGrid.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const cell=document.createElement('div');
+    cell.style.background='#080E1C';
+    cell.style.border='1px solid var(--card-border)';
+    cell.style.borderRadius='8px';
+    cell.style.padding='6px 8px';
+    cell.innerHTML=`<div style="font-family:'Bebas Neue',cursive;font-size:13px;color:var(--azul-claro);opacity:0.7;margin-bottom:4px;">↔</div>`+buildPlayerSearchHTML('cam'+i,'Cambio '+i);
+    camGrid.appendChild(cell);
+  }
+}
+
+function buildPlayerSearchHTML(id,placeholder){
+  return `<div style="position:relative;">
+    <input type="text" id="${id}" placeholder="${placeholder}" autocomplete="off"
+      style="width:100%;background:transparent;border:none;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:2px 0;"
+      oninput="filtrarPlantel(this,'dd_${id}')" onfocus="filtrarPlantel(this,'dd_${id}')" onblur="setTimeout(()=>document.getElementById('dd_${id}').style.display='none',200)">
+    <div id="dd_${id}" style="display:none;position:absolute;top:100%;left:0;right:0;background:#111827;border:1px solid var(--azul-claro);border-radius:8px;z-index:100;max-height:150px;overflow-y:auto;">
+    </div>
+  </div>`;
+}
+
+function filtrarPlantel(input,ddId){
+  const q=input.value.toLowerCase();
+  const dd=document.getElementById(ddId);
+  const results=PLANTEL.filter(p=>p.toLowerCase().includes(q)).slice(0,8);
+  if(results.length===0||q.length===0){dd.style.display='none';return;}
+  dd.innerHTML=results.map(p=>`<div class="player-option" onmousedown="seleccionarJugadorPlantel('${input.id}','${ddId}','${p.replace(/'/g,"\\'")}')"> ${p}</div>`).join('');
+  dd.style.display='block';
+}
+
+function seleccionarJugadorPlantel(inputId,ddId,nombre){
+  document.getElementById(inputId).value=nombre;
+  document.getElementById(ddId).style.display='none';
+}
+
+// ============================================================
+// PLAYER SEARCH EN MODAL GOL
+// ============================================================
+function filtrarJugadores(tipo){
+  const searchId=tipo==='goleador'?'golGoleadorSearch':'golAsistenciaSearch';
+  const ddId=tipo==='goleador'?'dropdownGoleador':'dropdownAsistencia';
+  const q=document.getElementById(searchId).value.toLowerCase();
+  const dd=document.getElementById(ddId);
+  const results=PLANTEL.filter(p=>p.toLowerCase().includes(q)).slice(0,8);
+  if(results.length===0){dd.classList.remove('open');return;}
+  dd.innerHTML=results.map(p=>`<div class="player-option" onmousedown="seleccionarJugadorModal('${tipo}','${p.replace(/'/g,"\\'")}')"> ${p}</div>`).join('');
+  dd.classList.add('open');
+}
+
+function mostrarDropdown(tipo){
+  filtrarJugadores(tipo);
+}
+
+function ocultarDropdown(tipo){
+  setTimeout(()=>{
+    const ddId=tipo==='goleador'?'dropdownGoleador':'dropdownAsistencia';
+    document.getElementById(ddId).classList.remove('open');
+  },200);
+}
+
+function seleccionarJugadorModal(tipo,nombre){
+  if(tipo==='goleador'){
+    document.getElementById('golGoleadorSearch').value=nombre;
+    document.getElementById('golGoleadorCustom').value='';
+    document.getElementById('dropdownGoleador').classList.remove('open');
+  } else {
+    document.getElementById('golAsistenciaSearch').value=nombre;
+    document.getElementById('golAsistenciaCustom').value='';
+    document.getElementById('dropdownAsistencia').classList.remove('open');
+  }
+}
 
 // ============================================================
 // THESPORTSDB
@@ -486,32 +613,27 @@ async function buscarPartidos(){
       fetch(`${TSDB_BASE}/searchevents.php?e=Universidad+Católica&s=${año}`).then(r=>r.json()),
     ]);
     const todos=[
-      ...(respLast.status==='fulfilled'?respLast.value.results||[]:[] ),
-      ...(respNext.status==='fulfilled'?respNext.value.events||[]:[] ),
-      ...(respSearch.status==='fulfilled'?respSearch.value.event||[]:[] ),
+      ...(respLast.status==='fulfilled'?respLast.value.results||[]:[]),
+      ...(respNext.status==='fulfilled'?respNext.value.events||[]:[]),
+      ...(respSearch.status==='fulfilled'?respSearch.value.event||[]:[]),
     ];
     const vistos=new Set();
     const filtrados=todos.filter(f=>{
       if(f.dateEvent!==fecha)return false;
       if(vistos.has(f.idEvent))return false;
-      vistos.add(f.idEvent);
-      return true;
+      vistos.add(f.idEvent);return true;
     });
     if(filtrados.length===0){
       const fechasDisp=[...new Set(todos.map(f=>f.dateEvent))].sort().slice(-6);
-      setBuscarStatus('err',fechasDisp.length>0
-        ?`No hay partido el ${fecha}. Fechas disponibles: ${fechasDisp.join(', ')}`
-        :'No se encontraron partidos');
+      setBuscarStatus('err',fechasDisp.length>0?`No hay partido el ${fecha}. Disponibles: ${fechasDisp.join(', ')}`:'No se encontraron partidos');
       return;
     }
     setBuscarStatus('ok',`${filtrados.length} partido(s) encontrado(s)`);
     const list=document.getElementById('fixtureList');
     filtrados.forEach(f=>{
-      const hs=f.intHomeScore??'?';
-      const as_=f.intAwayScore??'?';
+      const hs=f.intHomeScore??'?';const as_=f.intAwayScore??'?';
       const fin=f.strStatus==='FT'||f.strStatus==='AET';
-      const el=document.createElement('div');
-      el.className='fixture-item';
+      const el=document.createElement('div');el.className='fixture-item';
       el.innerHTML=`<span class="fixture-score">${fin?hs+'-'+as_:'—'}</span><div class="fixture-teams">${f.strHomeTeam} vs ${f.strAwayTeam}</div><div class="fixture-meta">${f.strLeague} · ${f.strStatus}</div>`;
       el.onclick=()=>seleccionarFixture(f,el);
       list.appendChild(el);
@@ -521,8 +643,7 @@ async function buscarPartidos(){
 
 function seleccionarFixture(fixture,el){
   document.querySelectorAll('.fixture-item').forEach(i=>i.classList.remove('selected'));
-  el.classList.add('selected');
-  fixtureSeleccionado=fixture;
+  el.classList.add('selected');fixtureSeleccionado=fixture;
   document.getElementById('partidoSeleccionadoNombre').textContent=`${fixture.strHomeTeam} vs ${fixture.strAwayTeam}`;
   document.getElementById('importStepA').style.display='none';
   document.getElementById('importStepB').style.display='block';
@@ -539,68 +660,46 @@ function resetImport(){
 
 async function importarPartido(){
   if(!fixtureSeleccionado)return;
-  const btn=document.getElementById('importarBtn');
-  btn.disabled=true;
+  const btn=document.getElementById('importarBtn');btn.disabled=true;
   setImportStatus('loading','⏳ Importando datos...');
-  const f=fixtureSeleccionado;
-  const fid=f.idEvent;
+  const f=fixtureSeleccionado;const fid=f.idEvent;
   const isHome=f.idHomeTeam===UC_TEAM_ID;
   const rival=isHome?f.strAwayTeam:f.strHomeTeam;
   const ucScore=isHome?(f.intHomeScore??0):(f.intAwayScore??0);
   const rivScore=isHome?(f.intAwayScore??0):(f.intHomeScore??0);
   const finished=f.strStatus==='FT'||f.strStatus==='AET';
-
-  // Fecha y hora
   document.getElementById('fecha').value=f.dateEvent;
-  if(f.strTimeLocal) document.getElementById('hora').value=f.strTimeLocal.substring(0,5);
+  if(f.strTimeLocal)document.getElementById('hora').value=f.strTimeLocal.substring(0,5);
   document.getElementById('rival').value=rival;
-
-  // Competición
   const liga=f.strLeague||'';
-  if(liga.toLowerCase().includes('primera')||liga.toLowerCase().includes('liga de primera')) document.getElementById('competicion').value='Campeonato Nacional';
-  else if(liga.toLowerCase().includes('libertadores')) document.getElementById('competicion').value='Copa Libertadores';
-  else if(liga.toLowerCase().includes('sudamericana')) document.getElementById('competicion').value='Copa Sudamericana';
-  else if(liga.toLowerCase().includes('copa de la liga')||liga.toLowerCase().includes('league cup')) document.getElementById('competicion').value='Copa de la Liga';
-    else if(liga.toLowerCase().includes('copa chile')) document.getElementById('competicion').value='Copa Chile';
-
-  // Marcador
+  if(liga.toLowerCase().includes('copa de la liga')||liga.toLowerCase().includes('league cup'))document.getElementById('competicion').value='Copa de la Liga';
+  else if(liga.toLowerCase().includes('libertadores'))document.getElementById('competicion').value='Copa Libertadores';
+  else if(liga.toLowerCase().includes('sudamericana'))document.getElementById('competicion').value='Copa Sudamericana';
+  else if(liga.toLowerCase().includes('copa chile'))document.getElementById('competicion').value='Copa Chile';
+  else if(liga.toLowerCase().includes('primera'))document.getElementById('competicion').value='Campeonato Nacional';
   if(finished){
     document.getElementById('resultadoTexto').value=`${ucScore}-${rivScore}`;
-    if(ucScore>rivScore) selectResultado('Triunfo',document.querySelector('.res-btn.triunfo'));
-    else if(ucScore<rivScore) selectResultado('Derrota',document.querySelector('.res-btn.derrota'));
+    if(ucScore>rivScore)selectResultado('Triunfo',document.querySelector('.res-btn.triunfo'));
+    else if(ucScore<rivScore)selectResultado('Derrota',document.querySelector('.res-btn.derrota'));
     else selectResultado('Empate',document.querySelector('.res-btn.empate'));
   }
-
-  // Alineación
-  let aliOk=false;
+  let aliOk=false,golesOk=false;
   try{
     setImportStatus('loading','⏳ Obteniendo alineación...');
     const linResp=await fetch(`${TSDB_BASE}/lookuplineup.php?id=${fid}`);
     const linData=await linResp.json();
     const lineup=linData.lineup||[];
     const ucPlayers=lineup.filter(p=>p.idTeam===UC_TEAM_ID);
-    // Ordenar: arquero primero, luego por posicion
-    const posOrd={"Goalkeeper":0,"Keeper":0,"GK":0,"Centre-Back":1,"Right-Back":1,"Left-Back":1,"Defender":1,"Central Midfield":2,"Defensive Midfield":2,"Attacking Midfield":2,"Right Midfield":2,"Left Midfield":2,"Midfielder":2,"Right Winger":3,"Left Winger":3,"Centre-Forward":3,"Forward":3,"Striker":3};
-    const titulares=ucPlayers.filter(p=>p.strSubstitute==='No');
+    const posOrd={'Goalkeeper':0,'Keeper':0,'GK':0,'Centre-Back':1,'Right-Back':1,'Left-Back':1,'Defender':1,'Central Midfield':2,'Defensive Midfield':2,'Attacking Midfield':2,'Right Midfield':2,'Left Midfield':2,'Midfielder':2,'Right Winger':3,'Left Winger':3,'Centre-Forward':3,'Forward':3,'Striker':3};
+    const titularesRaw=ucPlayers.filter(p=>p.strSubstitute==='No');
+    const titulares=[...titularesRaw].sort((a,b)=>{const pa=posOrd[a.strPosition]??2;const pb=posOrd[b.strPosition]??2;if(pa!==pb)return pa-pb;return(parseInt(a.intSquadNumber)||99)-(parseInt(b.intSquadNumber)||99);});
     const suplentes=ucPlayers.filter(p=>p.strSubstitute==='Yes');
     if(titulares.length>0){
-      titulares.forEach((p,i)=>{
-        if(i<11){
-          const apellido=p.strPlayer.trim().split(' ').slice(-1)[0];
-          document.getElementById('jug'+(i+1)).value=apellido;
-        }
-      });
-      suplentes.slice(0,5).forEach((p,i)=>{
-        const apellido=p.strPlayer.trim().split(' ').slice(-1)[0];
-        document.getElementById('cam'+(i+1)).value=apellido;
-      });
-      document.getElementById('aliTag').style.display='inline-block';
-      aliOk=true;
+      titulares.forEach((p,i)=>{if(i<11){const el=document.getElementById('jug'+(i+1));if(el)el.value=p.strPlayer;}});
+      suplentes.slice(0,5).forEach((p,i)=>{const el=document.getElementById('cam'+(i+1));if(el)el.value=p.strPlayer;});
+      document.getElementById('aliTag').style.display='inline-block';aliOk=true;
     }
-  }catch(e){console.error('Lineup error:',e);}
-
-  // Goles desde timeline
-  let golesOk=false;
+  }catch(e){console.error('Lineup:',e);}
   try{
     setImportStatus('loading','⏳ Obteniendo goles...');
     const tlResp=await fetch(`${TSDB_BASE}/lookuptimeline.php?id=${fid}`);
@@ -612,30 +711,19 @@ async function importarPartido(){
       golEvents.forEach(ev=>{
         const esUC=ev.idTeam===UC_TEAM_ID;
         const esPropio=ev.strTimelineDetail==='Own Goal';
-        let tipo;
-        if(esPropio) tipo=esUC?'contra':'favor';
-        else tipo=esUC?'favor':'contra';
-        const goleador=ev.strPlayer?.trim().split(' ').slice(-1)[0]||'Desconocido';
-        const asistencia=ev.strAssist?.trim().split(' ').slice(-1)[0]||'N/A';
-        const minuto=String(ev.intTime||0);
-        const tiempo=parseInt(ev.intTime||0)<=45?'1er Tiempo':'2do Tiempo';
-        goles.push({tipo,minuto,tiempo,goleador,asistencia,arco:'',piernaDer:'No',piernaIzq:'No',cabeza:'No',penal:ev.strTimelineDetail==='Penalty'?'Sí':'No',tiroli:'No',rebote:'No',contexto:'',resultParcial:''});
+        let tipo;if(esPropio)tipo=esUC?'contra':'favor';else tipo=esUC?'favor':'contra';
+        goles.push({tipo,minuto:String(ev.intTime||0),tiempo:parseInt(ev.intTime||0)<=45?'1er Tiempo':'2do Tiempo',goleador:ev.strPlayer||'Desconocido',asistencia:ev.strAssist||'N/A',arco:'',piernaDer:'No',piernaIzq:'No',cabeza:'No',penal:ev.strTimelineDetail==='Penalty'?'Sí':'No',tiroli:'No',rebote:'No',autogol:esPropio?'Sí':'No',contexto:'',resultParcial:''});
       });
       renderGoles();actualizarMarcador();
       document.getElementById('golesImportadosWrap').style.display='block';
       document.getElementById('golesImportadosLista').innerHTML=goles.map(g=>`<div style="padding:3px 0;border-bottom:1px solid var(--card-border);display:flex;justify-content:space-between;"><span>${g.minuto}' ${g.goleador}</span><span style="color:${g.tipo==='favor'?'#7AAAF0':'#FF8A9A'}">${g.tipo==='favor'?'✓ favor':'✗ contra'}</span></div>`).join('');
       golesOk=true;
     }
-  }catch(e){console.error('Timeline error:',e);}
-
+  }catch(e){console.error('Timeline:',e);}
   setTimeout(obtenerClima,300);
-  const partes=[];
-  if(aliOk)partes.push('alineación');
-  if(golesOk)partes.push(`${goles.length} goles`);
-  partes.push('clima');
+  const partes=[];if(aliOk)partes.push('alineación');if(golesOk)partes.push(`${goles.length} goles`);partes.push('clima');
   setImportStatus('ok',`✅ Importado: ${partes.join(', ')}`);
-  btn.disabled=false;
-  showNotif('¡Partido importado!','ok');
+  btn.disabled=false;showNotif('¡Partido importado!','ok');
 }
 
 // ============================================================
@@ -643,61 +731,35 @@ async function importarPartido(){
 // ============================================================
 const CODIGOS_CLIMA={0:'Despejado',1:'Mayormente despejado',2:'Parcialmente nublado',3:'Nublado',45:'Neblina',48:'Neblina',51:'Llovizna leve',53:'Llovizna',55:'Llovizna intensa',61:'Lluvia leve',63:'Lluvia moderada',65:'Lluvia intensa',71:'Nieve',73:'Nieve',75:'Nieve',80:'Chubascos',81:'Chubascos',82:'Chubascos',95:'Tormenta',96:'Tormenta',99:'Tormenta'};
 const ICONOS_CLIMA={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',51:'🌦',53:'🌦',55:'🌧',61:'🌧',63:'🌧',65:'🌧',71:'❄️',73:'❄️',75:'❄️',80:'🌦',81:'🌧',82:'⛈',95:'⛈',96:'⛈',99:'⛈'};
-
 async function obtenerClima(){
-  const fecha=v('fecha');
-  if(!fecha){showNotif('Ingresa la fecha primero','err');return;}
-  const btn=document.getElementById('climaBtnObtener');
-  btn.textContent='⏳ Obteniendo...';btn.disabled=true;
+  const fecha=v('fecha');if(!fecha){showNotif('Ingresa la fecha primero','err');return;}
+  const btn=document.getElementById('climaBtnObtener');btn.textContent='⏳ Obteniendo...';btn.disabled=true;
   try{
-    const ahora=new Date();
-    const fechaPartido=new Date(fecha+'T'+(v('hora')||'20:00')+':00');
-    const esPasado=fechaPartido<ahora;
-    const url=esPasado
-      ?`https://archive-api.open-meteo.com/v1/archive?latitude=${CLARO_LAT}&longitude=${CLARO_LON}&start_date=${fecha}&end_date=${fecha}&hourly=weathercode,temperature_2m&timezone=America/Santiago`
-      :`https://api.open-meteo.com/v1/forecast?latitude=${CLARO_LAT}&longitude=${CLARO_LON}&hourly=weathercode,temperature_2m&timezone=America/Santiago&start_date=${fecha}&end_date=${fecha}`;
-    const resp=await fetch(url);
-    const data=await resp.json();
+    const ahora=new Date();const fechaPartido=new Date(fecha+'T'+(v('hora')||'20:00')+':00');const esPasado=fechaPartido<ahora;
+    const url=esPasado?`https://archive-api.open-meteo.com/v1/archive?latitude=${CLARO_LAT}&longitude=${CLARO_LON}&start_date=${fecha}&end_date=${fecha}&hourly=weathercode,temperature_2m&timezone=America/Santiago`:`https://api.open-meteo.com/v1/forecast?latitude=${CLARO_LAT}&longitude=${CLARO_LON}&hourly=weathercode,temperature_2m&timezone=America/Santiago&start_date=${fecha}&end_date=${fecha}`;
+    const resp=await fetch(url);const data=await resp.json();
     const horaNum=v('hora')?parseInt(v('hora').split(':')[0]):20;
-    const temp=Math.round(data.hourly.temperature_2m[horaNum]);
-    const code=data.hourly.weathercode[horaNum];
-    const desc=CODIGOS_CLIMA[code]||'Nublado';
-    const icon=ICONOS_CLIMA[code]||'🌤';
-    btn.style.display='none';
-    document.getElementById('climaTag').style.display='inline-block';
-    document.getElementById('climaAutoBox').style.display='flex';
-    document.getElementById('climaIcono').textContent=icon;
-    document.getElementById('climaValor').textContent=`${desc} · ${temp}°C`;
+    const temp=Math.round(data.hourly.temperature_2m[horaNum]);const code=data.hourly.weathercode[horaNum];
+    const desc=CODIGOS_CLIMA[code]||'Nublado';const icon=ICONOS_CLIMA[code]||'🌤';
+    btn.style.display='none';document.getElementById('climaTag').style.display='inline-block';document.getElementById('climaAutoBox').style.display='flex';
+    document.getElementById('climaIcono').textContent=icon;document.getElementById('climaValor').textContent=`${desc} · ${temp}°C`;
     climaValorFinal=`${desc} - ${temp}°C`;
-    let climaForm='Nublado';
-    if(code<=1)climaForm='Despejado';
-    else if(code<=3)climaForm='Nublado';
-    else if(code>=51&&code<=82)climaForm='Lluvia';
-    else if(temp<12)climaForm='Frío';
-    else if(temp>26)climaForm='Calor';
-    document.getElementById('clima').value=climaForm;
-    showNotif(`${icon} ${desc} · ${temp}°C`,'ok');
-  }catch(e){
-    btn.textContent='🌡 Obtener clima automático';btn.disabled=false;
-    showNotif('No se pudo obtener el clima','err');
-  }
+    let climaForm='Nublado';if(code<=1)climaForm='Despejado';else if(code<=3)climaForm='Nublado';else if(code>=51&&code<=82)climaForm='Lluvia';else if(temp<12)climaForm='Frío';else if(temp>26)climaForm='Calor';
+    document.getElementById('clima').value=climaForm;showNotif(`${icon} ${desc} · ${temp}°C`,'ok');
+  }catch(e){btn.textContent='🌡 Obtener clima automático';btn.disabled=false;showNotif('No se pudo obtener el clima','err');}
 }
 
 // ============================================================
-// POLERAS — construir string final
+// POLERAS
 // ============================================================
 function getPoleraString(colorKey,marcaKey,versionKey,customId){
-  const color=colorSelections[colorKey]||'';
-  const marca=chipSelections[marcaKey]||'';
+  const color=colorSelections[colorKey]||'';const marca=chipSelections[marcaKey]||'';
   const version=chipSelections[versionKey]||document.getElementById(customId).value.trim()||'';
-  return [color,marca,version].filter(Boolean).join(' - ');
+  return[color,marca,version].filter(Boolean).join(' - ');
 }
-
 function selectColor(el,colorKey,valor){
-  const group=el.parentElement;
-  group.querySelectorAll('.chip-color').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');
-  colorSelections[colorKey]=valor;
+  el.parentElement.querySelectorAll('.chip-color').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');colorSelections[colorKey]=valor;
 }
 
 // ============================================================
@@ -713,10 +775,8 @@ function goStep(n){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById('step'+n).classList.add('active');
   ['1','2','3'].forEach(i=>{
-    const btn=document.getElementById('stepBtn'+i);
-    btn.classList.remove('active','done');
-    if(parseInt(i)<n)btn.classList.add('done');
-    if(parseInt(i)===n)btn.classList.add('active');
+    const btn=document.getElementById('stepBtn'+i);btn.classList.remove('active','done');
+    if(parseInt(i)<n)btn.classList.add('done');if(parseInt(i)===n)btn.classList.add('active');
   });
   window.scrollTo(0,0);
 }
@@ -727,19 +787,26 @@ function irAGuardar(){generarResumen();goStep(3);}
 // CHIPS Y TOGGLES
 // ============================================================
 function togglePresencial(){presencial=!presencial;document.getElementById('togglePresencial').classList.toggle('on',presencial);document.getElementById('datoPresencial').style.display=presencial?'block':'none';}
-function selectChip(el,group){el.closest('.chip-group').querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');chipSelections[group]=el.textContent.trim();if(group==='tribuna')tribunaSeleccionada=el.textContent.trim();}
-function toggleChip(el,group){
-  const isSelected = el.classList.contains('selected');
-  el.classList.toggle('selected', !isSelected);
-  chipSelections[group] = !isSelected ? el.textContent.trim() : '';
+function toggleAutogol(){
+  esAutogol=!esAutogol;
+  document.getElementById('toggleAutogol').classList.toggle('on',esAutogol);
+  // Si autogol a favor del rival → el goleador es jugador de la UC
+  const label=document.getElementById('goleadorLabel');
+  if(esAutogol){
+    label.textContent=tipoGolActual==='contra'?'Goleador (jugador UC que metió el autogol)':'Goleador (jugador rival que metió el autogol)';
+  } else {
+    label.textContent='Goleador';
+  }
 }
-function selectJugadorChip(el,group,valor){el.parentElement.querySelectorAll('.jugador-chip').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');chipSelections[group]=valor;if(group==='goleador')document.getElementById('golGoleadorCustom').value='';if(group==='asistencia')document.getElementById('golAsistenciaCustom').value='';}
+function selectChip(el,group){el.closest('.chip-group').querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');chipSelections[group]=el.textContent.trim();if(group==='tribuna')tribunaSeleccionada=el.textContent.trim();}
+function toggleChip(el,group){const isSelected=el.classList.contains('selected');el.classList.toggle('selected',!isSelected);chipSelections[group]=!isSelected?el.textContent.trim():'';}
 function selectResultado(val,el){document.querySelectorAll('.res-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');resultadoSeleccionado=val;}
 
 function v(id){return(document.getElementById(id)?.value||'').trim();}
-function getJugadores(){const arr=[];for(let i=1;i<=11;i++){const val=v('jug'+i);if(val)arr.push(val);}return arr;}
+function getJugField(id){return document.getElementById(id)?.value?.trim()||'';}
 function actualizarMarcador(){document.getElementById('golesUC').textContent=goles.filter(g=>g.tipo==='favor').length;document.getElementById('golesRival').textContent=goles.filter(g=>g.tipo==='contra').length;}
 function showNotif(msg,tipo='ok'){const n=document.getElementById('notif');n.textContent=msg;n.className='notif show '+tipo;setTimeout(()=>n.classList.remove('show'),3500);}
+
 function validarPartido(){
   if(!v('fecha')){showNotif('Ingresa la fecha','err');return false;}
   if(!v('rival')){showNotif('Ingresa el rival','err');return false;}
@@ -749,97 +816,107 @@ function validarPartido(){
   return true;
 }
 
+function parsearAlineacion(){
+  const texto=document.getElementById('alineacionTexto').value.trim();
+  if(!texto){showNotif('Pega la alineación primero','err');return;}
+  const jugadores=texto.split(/[,;\n]+/).map(j=>j.replace(/^\d+[.\-)\s]+/,'').trim()).filter(Boolean);
+  if(jugadores.length<1){showNotif('No se reconocieron jugadores','err');return;}
+  for(let i=1;i<=11;i++){const el=document.getElementById('jug'+i);if(el)el.value='';}
+  jugadores.slice(0,11).forEach((j,i)=>{const el=document.getElementById('jug'+(i+1));if(el)el.value=j;});
+  jugadores.slice(11,16).forEach((j,i)=>{const el=document.getElementById('cam'+(i+1));if(el)el.value=j;});
+  showNotif('✓ '+Math.min(jugadores.length,11)+' jugadores distribuidos','ok');
+  document.getElementById('alineacionTexto').value='';
+}
+
 // ============================================================
 // MODAL GOL
 // ============================================================
 function abrirModal(tipo){
-  tipoGolActual=tipo;
+  tipoGolActual=tipo;editandoGolIdx=-1;esAutogol=false;
   document.getElementById('modalGolTitle').textContent=tipo==='favor'?'⚽ Gol a Favor':'💀 Gol en Contra';
-  ['goleador','asistencia','arco','cuerpo','penal','libre','contexto'].forEach(k=>chipSelections[k]='');
+  document.getElementById('toggleAutogol').classList.remove('on');
+  document.getElementById('goleadorLabel').textContent='Goleador';
+  ['arco','cuerpo','penal','libre','contexto'].forEach(k=>chipSelections[k]='');
   document.querySelectorAll('#modalGol .chip').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('golMin').value='';document.getElementById('golGoleadorCustom').value='';document.getElementById('golAsistenciaCustom').value='';document.getElementById('golResultadoParcial').value='';
-  const todos=[...new Set([...getJugadores(),...[v('cam1'),v('cam2'),v('cam3'),v('cam4'),v('cam5')].filter(Boolean)])];
-  function renderGrid(gridId,group){
-    const grid=document.getElementById(gridId);grid.innerHTML='';
-    todos.forEach(j=>{const el=document.createElement('div');el.className='jugador-chip';el.textContent=j;el.onclick=()=>selectJugadorChip(el,group,j);grid.appendChild(el);});
-    const nEl=document.createElement('div');nEl.className='jugador-chip';nEl.textContent='N/A';nEl.onclick=()=>selectJugadorChip(nEl,group,'N/A');grid.appendChild(nEl);
-  }
-  if(tipo==='favor'){renderGrid('gridGoleador','goleador');renderGrid('gridAsistencia','asistencia');}
-  else{document.getElementById('gridGoleador').innerHTML='<div style="color:var(--gris);font-size:12px;padding:6px 0;">Escribe el nombre del jugador rival ↓</div>';document.getElementById('gridAsistencia').innerHTML='';}
+  document.getElementById('golMin').value='';
+  document.getElementById('golGoleadorSearch').value='';document.getElementById('golGoleadorCustom').value='';
+  document.getElementById('golAsistenciaSearch').value='';document.getElementById('golAsistenciaCustom').value='';
+  document.getElementById('golResultadoParcial').value='';
+  document.getElementById('btnGuardarGol').textContent='✔ GUARDAR GOL';
+  document.getElementById('btnGuardarGol').onclick=guardarGol;
   document.getElementById('modalGol').classList.add('open');
 }
-function cerrarModal(){document.getElementById('modalGol').classList.remove('open');}
-function guardarGol(){
-  const min=v('golMin');if(!min){showNotif('Ingresa el minuto','err');return;}
-  const goleador=v('golGoleadorCustom')||chipSelections['goleador']||'';if(!goleador){showNotif('Ingresa el goleador','err');return;}
-  const asistencia=v('golAsistenciaCustom')||chipSelections['asistencia']||'N/A';
+
+function editarGol(i){
+  const g=goles[i];editandoGolIdx=i;
+  tipoGolActual=g.tipo;esAutogol=g.autogol==='Sí';
+  document.getElementById('modalGolTitle').textContent=g.tipo==='favor'?'✏️ Editar Gol a Favor':'✏️ Editar Gol en Contra';
+  document.getElementById('toggleAutogol').classList.toggle('on',esAutogol);
+  document.getElementById('goleadorLabel').textContent=esAutogol?'Goleador (autogol)':'Goleador';
+  ['arco','cuerpo','penal','libre','contexto'].forEach(k=>chipSelections[k]='');
+  document.querySelectorAll('#modalGol .chip').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('golMin').value=g.minuto;
+  document.getElementById('golTiempo').value=g.tiempo;
+  document.getElementById('golGoleadorSearch').value=g.goleador;document.getElementById('golGoleadorCustom').value='';
+  document.getElementById('golAsistenciaSearch').value=g.asistencia==='N/A'?'':g.asistencia;document.getElementById('golAsistenciaCustom').value='';
+  document.getElementById('golResultadoParcial').value=g.resultParcial||'';
+  // Restore chips
+  const cuerpoVal=g.piernaDer==='Sí'?'🦵 Pie derecho':g.piernaIzq==='Sí'?'🦵 Pie izquierdo':g.cabeza==='Sí'?'🗣️ Cabeza':g.rebote==='Sí'?'🔄 Rebote':'';
+  document.querySelectorAll('#modalGol .chip').forEach(c=>{
+    const t=c.textContent.trim();
+    if(t===g.arco){c.classList.add('selected');chipSelections['arco']=g.arco;}
+    if(t===cuerpoVal){c.classList.add('selected');chipSelections['cuerpo']=cuerpoVal;}
+    if(t==='📍 Penal'&&g.penal==='Sí'){c.classList.add('selected');chipSelections['penal']='📍 Penal';}
+    if(t==='🎯 Tiro Libre'&&g.tiroli==='Sí'){c.classList.add('selected');chipSelections['libre']='🎯 Tiro Libre';}
+    if(t===g.contexto){c.classList.add('selected');chipSelections['contexto']=g.contexto;}
+  });
+  document.getElementById('btnGuardarGol').textContent='✔ ACTUALIZAR GOL';
+  document.getElementById('btnGuardarGol').onclick=()=>actualizarGol(i);
+  document.getElementById('modalGol').classList.add('open');
+}
+
+function cerrarModal(){
+  document.getElementById('modalGol').classList.remove('open');
+  document.getElementById('btnGuardarGol').textContent='✔ GUARDAR GOL';
+  document.getElementById('btnGuardarGol').onclick=guardarGol;
+}
+
+function getGoleador(){return document.getElementById('golGoleadorSearch').value.trim()||document.getElementById('golGoleadorCustom').value.trim()||'';}
+function getAsistencia(){return document.getElementById('golAsistenciaSearch').value.trim()||document.getElementById('golAsistenciaCustom').value.trim()||'N/A';}
+
+function buildGolObj(){
+  const min=v('golMin');
+  const goleador=getGoleador();
   const cuerpo=chipSelections['cuerpo']||'';
-  goles.push({tipo:tipoGolActual,minuto:min,tiempo:document.getElementById('golTiempo').value,goleador,asistencia,arco:chipSelections['arco']||'',piernaDer:cuerpo==='🦵 Pie derecho'?'Sí':'No',piernaIzq:cuerpo==='🦵 Pie izquierdo'?'Sí':'No',cabeza:cuerpo==='🗣️ Cabeza'?'Sí':'No',penal:chipSelections['penal']==='📍 Penal'?'Sí':'No',tiroli:chipSelections['libre']==='🎯 Tiro Libre'?'Sí':'No',rebote:cuerpo==='🔄 Rebote'?'Sí':'No',contexto:chipSelections['contexto']||'',resultParcial:v('golResultadoParcial')});
+  return{tipo:tipoGolActual,minuto:min,tiempo:document.getElementById('golTiempo').value,goleador,asistencia:getAsistencia(),arco:chipSelections['arco']||'',piernaDer:cuerpo==='🦵 Pie derecho'?'Sí':'No',piernaIzq:cuerpo==='🦵 Pie izquierdo'?'Sí':'No',cabeza:cuerpo==='🗣️ Cabeza'?'Sí':'No',penal:chipSelections['penal']==='📍 Penal'?'Sí':'No',tiroli:chipSelections['libre']==='🎯 Tiro Libre'?'Sí':'No',rebote:cuerpo==='🔄 Rebote'?'Sí':'No',autogol:esAutogol?'Sí':'No',contexto:chipSelections['contexto']||'',resultParcial:v('golResultadoParcial')};
+}
+
+function guardarGol(){
+  if(!v('golMin')){showNotif('Ingresa el minuto','err');return;}
+  if(!getGoleador()){showNotif('Ingresa el goleador','err');return;}
+  goles.push(buildGolObj());
   cerrarModal();renderGoles();actualizarMarcador();showNotif('Gol registrado ✓','ok');
 }
+
+function actualizarGol(i){
+  if(!v('golMin')){showNotif('Ingresa el minuto','err');return;}
+  if(!getGoleador()){showNotif('Ingresa el goleador','err');return;}
+  goles[i]=buildGolObj();
+  cerrarModal();renderGoles();actualizarMarcador();showNotif('Gol actualizado ✓','ok');
+}
+
+function eliminarGol(i){goles.splice(i,1);renderGoles();actualizarMarcador();showNotif('Gol eliminado','ok');}
+
 function renderGoles(){
   const lista=document.getElementById('listaGoles');lista.innerHTML='';
   goles.forEach((g,i)=>{
     const el=document.createElement('div');el.className='gol-item'+(g.tipo==='contra'?' contra':'');
     const badge=g.tipo==='favor'?'<span class="gol-badge favor">A FAVOR</span>':'<span class="gol-badge contra">EN CONTRA</span>';
-    el.innerHTML=`<div class="gol-min ${g.tipo==='contra'?'en-contra':''}">${g.minuto}'</div><div class="gol-info"><div class="gol-nombre">${g.goleador} ${badge}</div><div class="gol-detalle">${g.tiempo} · Asist: ${g.asistencia}${g.arco?' · '+g.arco:''}</div></div><div style="display:flex;gap:6px;"><button class="gol-edit" onclick="editarGol(${i})" style="background:none;border:none;color:var(--azul-claro);cursor:pointer;font-size:15px;padding:4px;">✏️</button><button class="gol-delete" onclick="eliminarGol(${i})" style="background:none;border:none;color:#1E2D4A;cursor:pointer;font-size:17px;padding:4px;">✕</button></div>`;
+    const agBadge=g.autogol==='Sí'?'<span class="gol-badge" style="background:rgba(255,193,7,0.2);color:#FFC107;">AG</span>':'';
+    el.innerHTML=`<div class="gol-min ${g.tipo==='contra'?'en-contra':''}">${g.minuto}'</div><div class="gol-info"><div class="gol-nombre">${g.goleador} ${badge}${agBadge}</div><div class="gol-detalle">${g.tiempo} · Asist: ${g.asistencia}${g.arco?' · '+g.arco:''}</div></div><div class="gol-actions"><button class="gol-edit" onclick="editarGol(${i})">✏️</button><button class="gol-delete" onclick="eliminarGol(${i})">✕</button></div>`;
     lista.appendChild(el);
   });
 }
-function editarGol(i){
-  const g=goles[i];
-  tipoGolActual=g.tipo;
-  document.getElementById('modalGolTitle').textContent=g.tipo==='favor'?'✏️ Editar Gol a Favor':'✏️ Editar Gol en Contra';
-  ['goleador','asistencia','arco','cuerpo','penal','libre','contexto'].forEach(k=>chipSelections[k]='');
-  document.querySelectorAll('#modalGol .chip').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('golMin').value=g.minuto;
-  document.getElementById('golGoleadorCustom').value=g.goleador;
-  document.getElementById('golAsistenciaCustom').value=g.asistencia==='N/A'?'':g.asistencia;
-  document.getElementById('golResultadoParcial').value=g.resultParcial||'';
-  // Restore tiempo
-  document.getElementById('golTiempo').value=g.tiempo;
-  // Restore arco chip
-  if(g.arco) document.querySelectorAll('#modalGol .chip-group').forEach(cg=>{
-    cg.querySelectorAll('.chip').forEach(c=>{if(c.textContent.trim()===g.arco){c.classList.add('selected');chipSelections['arco']=g.arco;}});
-  });
-  // Restore cuerpo
-  const cuerpoVal=g.piernaDer==='Sí'?'🦵 Pie derecho':g.piernaIzq==='Sí'?'🦵 Pie izquierdo':g.cabeza==='Sí'?'🗣️ Cabeza':g.rebote==='Sí'?'🔄 Rebote':'';
-  if(cuerpoVal){chipSelections['cuerpo']=cuerpoVal;document.querySelectorAll('#modalGol .chip').forEach(c=>{if(c.textContent.trim()===cuerpoVal)c.classList.add('selected');});}
-  // Restore penal/libre
-  if(g.penal==='Sí'){chipSelections['penal']='📍 Penal';document.querySelectorAll('#modalGol .chip').forEach(c=>{if(c.textContent.trim()==='📍 Penal')c.classList.add('selected');});}
-  if(g.tiroli==='Sí'){chipSelections['libre']='🎯 Tiro Libre';document.querySelectorAll('#modalGol .chip').forEach(c=>{if(c.textContent.trim()==='🎯 Tiro Libre')c.classList.add('selected');});}
-  // Restore contexto
-  if(g.contexto){chipSelections['contexto']=g.contexto;document.querySelectorAll('#modalGol .chip').forEach(c=>{if(c.textContent.trim()===g.contexto)c.classList.add('selected');});}
-  // Populate jugadores grid
-  const todos=[...new Set([...getJugadores(),...[v('cam1'),v('cam2'),v('cam3'),v('cam4'),v('cam5')].filter(Boolean)])];
-  function renderGrid(gridId,group){
-    const grid=document.getElementById(gridId);grid.innerHTML='';
-    todos.forEach(j=>{const el=document.createElement('div');el.className='jugador-chip';el.textContent=j;el.onclick=()=>selectJugadorChip(el,group,j);grid.appendChild(el);});
-    const nEl=document.createElement('div');nEl.className='jugador-chip';nEl.textContent='N/A';nEl.onclick=()=>selectJugadorChip(nEl,group,'N/A');grid.appendChild(nEl);
-  }
-  if(g.tipo==='favor'){renderGrid('gridGoleador','goleador');renderGrid('gridAsistencia','asistencia');}
-  else{document.getElementById('gridGoleador').innerHTML='<div style="color:var(--gris);font-size:12px;padding:6px 0;">Escribe el nombre del jugador rival ↓</div>';document.getElementById('gridAsistencia').innerHTML='';}
-  // Change save button to update
-  const saveBtn=document.querySelector('#modalGol .btn-primary');
-  saveBtn.textContent='✔ ACTUALIZAR GOL';
-  saveBtn.onclick=()=>actualizarGol(i);
-  document.getElementById('modalGol').classList.add('open');
-}
-
-function actualizarGol(i){
-  const min=v('golMin');if(!min){showNotif('Ingresa el minuto','err');return;}
-  const goleador=v('golGoleadorCustom')||chipSelections['goleador']||'';if(!goleador){showNotif('Ingresa el goleador','err');return;}
-  const asistencia=v('golAsistenciaCustom')||chipSelections['asistencia']||'N/A';
-  const cuerpo=chipSelections['cuerpo']||'';
-  goles[i]={tipo:tipoGolActual,minuto:min,tiempo:document.getElementById('golTiempo').value,goleador,asistencia,arco:chipSelections['arco']||'',piernaDer:cuerpo==='🦵 Pie derecho'?'Sí':'No',piernaIzq:cuerpo==='🦵 Pie izquierdo'?'Sí':'No',cabeza:cuerpo==='🗣️ Cabeza'?'Sí':'No',penal:chipSelections['penal']==='📍 Penal'?'Sí':'No',tiroli:chipSelections['libre']==='🎯 Tiro Libre'?'Sí':'No',rebote:cuerpo==='🔄 Rebote'?'Sí':'No',contexto:chipSelections['contexto']||'',resultParcial:v('golResultadoParcial')};
-  // Reset save button
-  const saveBtn=document.querySelector('#modalGol .btn-primary');
-  saveBtn.textContent='✔ GUARDAR GOL';
-  saveBtn.onclick=guardarGol;
-  cerrarModal();renderGoles();actualizarMarcador();showNotif('Gol actualizado ✓','ok');
-}
-
-function eliminarGol(i){goles.splice(i,1);renderGoles();actualizarMarcador();showNotif('Gol eliminado','ok');}
 
 // ============================================================
 // RESUMEN
@@ -848,7 +925,7 @@ function generarResumen(){
   const climaFinal=climaValorFinal||v('clima');
   const poleraEquipo=getPoleraString('colorEquipo','marcaEquipo','versionEquipo','poleraEquipoCustom');
   const poleraAgu=presencial?getPoleraString('colorAgu','marcaAgu','versionAgu','poleraAguCustom')||'N/A':'N/A';
-  const rows=[['Fecha',v('fecha')],['Hora',v('hora')],['Competición',v('competicion')],['Rival',v('rival')],['Marcador',v('resultadoTexto')],['Resultado',resultadoSeleccionado],['Presencial',presencial?'Sí':'No'],presencial?['Tribuna',tribunaSeleccionada]:null,presencial?['Asiento',v('asiento')]:null,['Acompañante',presencial?(v('acompanante')||'N/A'):'N/A'],['Clima',climaFinal],['Polera Equipo',poleraEquipo],['Polera Agustín',poleraAgu]].filter(Boolean);
+  const rows=[['Fecha',v('fecha')],['Hora',v('hora')],['Competición',v('competicion')],['Rival',v('rival')],['Marcador',v('resultadoTexto')],['Resultado',resultadoSeleccionado],['Presencial',presencial?'Sí':'No'],presencial?['Tribuna',tribunaSeleccionada]:null,presencial?['Asiento',v('asiento')]:null,presencial?['Acompañante',v('acompanante')||'N/A']:null,['Clima',climaFinal],['Polera Equipo',poleraEquipo],['Polera Agustín',poleraAgu]].filter(Boolean);
   document.getElementById('resumenPartido').innerHTML=rows.map(([k,val])=>`<div class="resumen-row"><span class="resumen-key">${k}</span><span class="resumen-val">${val||'—'}</span></div>`).join('');
   const rg=document.getElementById('resumenGoles');
   if(goles.length===0){rg.innerHTML='<span>Sin goles registrados</span>';}
@@ -856,78 +933,209 @@ function generarResumen(){
 }
 
 // ============================================================
-// ENVÍO
+// ENVÍO A GOOGLE SHEETS
 // ============================================================
-async function submitForm(formId,entries){await fetch(`https://docs.google.com/forms/d/e/${formId}/formResponse`,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(entries).toString()});}
-
-async function enviarTodo(){
-  const btn=document.getElementById('btnEnviar');btn.disabled=true;btn.textContent='⏳ Enviando...';
-  document.getElementById('statusBar').classList.add('visible');
-  const fecha=v('fecha'),hora=v('hora'),climaFinal=climaValorFinal||v('clima');
-  const poleraEquipo=getPoleraString('colorEquipo','marcaEquipo','versionEquipo','poleraEquipoCustom');
-  const poleraAgu=presencial?getPoleraString('colorAgu','marcaAgu','versionAgu','poleraAguCustom')||'N/A':'N/A';
-  const ctx={presencial:presencial?'Sí':'No',tribuna:presencial?tribunaSeleccionada:'No presencial',asiento:presencial?v('asiento'):'No Presencial',competicion:v('competicion'),rival:v('rival'),marcador:v('resultadoTexto'),resultado:resultadoSeleccionado,acompanante:presencial?(v('acompanante').trim()||'N/A'):'N/A',clima:climaFinal,poleraEquipo,poleraAgu};
-
-  setStatus('statusPartido','loading','⏳','Enviando partido...');
-  try{
-    await submitForm(FORM_PARTIDOS_ID,{[EP.fecha]:fecha,[EP.hora]:hora,[EP.presencial]:ctx.presencial,[EP.tribuna]:ctx.tribuna,[EP.asiento]:ctx.asiento,[EP.competicion]:ctx.competicion,[EP.rival]:ctx.rival,[EP.resultMarcador]:ctx.marcador,[EP.resultado]:ctx.resultado,[EP.acompanante]:ctx.acompanante,[EP.clima]:ctx.clima,[EP.poleraEquipo]:ctx.poleraEquipo,[EP.poleraAgu]:ctx.poleraAgu,[EP.dt]:v('dt'),[EP.jug1]:v('jug1'),[EP.jug2]:v('jug2'),[EP.jug3]:v('jug3'),[EP.jug4]:v('jug4'),[EP.jug5]:v('jug5'),[EP.jug6]:v('jug6'),[EP.jug7]:v('jug7'),[EP.jug8]:v('jug8'),[EP.jug9]:v('jug9'),[EP.jug10]:v('jug10'),[EP.jug11]:v('jug11'),[EP.cam1]:v('cam1')||'-',[EP.cam2]:v('cam2')||'-',[EP.cam3]:v('cam3')||'-',[EP.cam4]:v('cam4')||'-',[EP.cam5]:v('cam5')||'-'});
-    setStatus('statusPartido','success','✅','Partido enviado');
-  }catch(e){setStatus('statusPartido','error','❌','Error al enviar partido');}
-
-  if(goles.length>0){
-    document.getElementById('statusGoles').style.display='flex';
-    setStatus('statusGoles','loading','⏳',`Enviando ${goles.length} goles...`);
-    let errores=0;
-    for(const g of goles){
-      try{await submitForm(FORM_GOLES_ID,{[EG.fecha]:fecha,[EG.hora]:hora,[EG.presencial]:ctx.presencial,[EG.tribuna]:ctx.tribuna,[EG.asiento]:ctx.asiento,[EG.competicion]:ctx.competicion,[EG.rival]:ctx.rival,[EG.gol]:g.tipo==='favor'?'A favor':'En Contra',[EG.tiempo]:g.tiempo,[EG.minuto]:g.minuto,[EG.resultParcial]:g.resultParcial||ctx.marcador,[EG.resultFinal]:ctx.marcador,[EG.goleador]:g.goleador,[EG.asistencia]:g.asistencia,[EG.arco]:g.arco,[EG.piernaDer]:g.piernaDer,[EG.piernaIzq]:g.piernaIzq,[EG.cabeza]:g.cabeza,[EG.penal]:g.penal,[EG.tiroli]:g.tiroli,[EG.rebote]:g.rebote,[EG.contexto]:g.contexto,[EG.resultadoFin]:ctx.resultado,[EG.acompanante]:ctx.acompanante,[EG.clima]:ctx.clima,[EG.poleraEquipo]:ctx.poleraEquipo,[EG.poleraAgu]:ctx.poleraAgu});await new Promise(r=>setTimeout(r,400));}
-      catch(e){errores++;}
-    }
-    setStatus('statusGoles',errores===0?'success':'error',errores===0?'✅':'⚠️',errores===0?`${goles.length} goles enviados`:`${goles.length-errores}/${goles.length} enviados`);
-  }
-  await new Promise(r=>setTimeout(r,800));
-  btn.style.display='none';document.getElementById('successScreen').style.display='block';
+async function submitForm(formId,entries){
+  const url=`https://docs.google.com/forms/d/e/${formId}/formResponse`;
+  const resp=await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(entries).toString()});
+  return resp;
 }
 
-function setStatus(id,tipo,icon,msg){const el=document.getElementById(id);el.querySelector('.status-icon').textContent=icon;const txt=el.querySelector('.status-text');txt.textContent=msg;txt.className='status-text '+tipo;}
+function buildCtx(){
+  const climaFinal=climaValorFinal||v('clima');
+  const poleraEquipo=getPoleraString('colorEquipo','marcaEquipo','versionEquipo','poleraEquipoCustom');
+  const poleraAgu=presencial?(getPoleraString('colorAgu','marcaAgu','versionAgu','poleraAguCustom')||'N/A'):'N/A';
+  return{
+    fecha:v('fecha'),hora:v('hora'),
+    presencial:presencial?'Sí':'No',
+    tribuna:presencial?tribunaSeleccionada:'No presencial',
+    asiento:presencial?v('asiento'):'No Presencial',
+    competicion:v('competicion'),rival:v('rival'),
+    marcador:v('resultadoTexto'),resultado:resultadoSeleccionado,
+    acompanante:presencial?(v('acompanante')||'N/A'):'N/A',
+    clima:climaFinal,poleraEquipo,poleraAgu,
+  };
+}
+
+async function enviarPartido(ctx){
+  setStatus('statusPartido','loading','⏳','Enviando datos del partido...');
+  try{
+    await submitForm(FORM_PARTIDOS_ID,{
+      [EP.fecha]:ctx.fecha,[EP.hora]:ctx.hora,[EP.presencial]:ctx.presencial,
+      [EP.tribuna]:ctx.tribuna,[EP.asiento]:ctx.asiento,[EP.competicion]:ctx.competicion,
+      [EP.rival]:ctx.rival,[EP.resultMarcador]:ctx.marcador,[EP.resultado]:ctx.resultado,
+      [EP.acompanante]:ctx.acompanante,[EP.clima]:ctx.clima,
+      [EP.poleraEquipo]:ctx.poleraEquipo,[EP.poleraAgu]:ctx.poleraAgu,
+      [EP.dt]:v('dt'),
+      [EP.jug1]:v('jug1'),[EP.jug2]:v('jug2'),[EP.jug3]:v('jug3'),[EP.jug4]:v('jug4'),
+      [EP.jug5]:v('jug5'),[EP.jug6]:v('jug6'),[EP.jug7]:v('jug7'),[EP.jug8]:v('jug8'),
+      [EP.jug9]:v('jug9'),[EP.jug10]:v('jug10'),[EP.jug11]:v('jug11'),
+      [EP.cam1]:v('cam1')||'-',[EP.cam2]:v('cam2')||'-',[EP.cam3]:v('cam3')||'-',
+      [EP.cam4]:v('cam4')||'-',[EP.cam5]:v('cam5')||'-',
+    });
+    setStatus('statusPartido','success','✅','Partido enviado correctamente');
+    return true;
+  }catch(e){
+    setStatus('statusPartido','error','❌','Error al enviar partido');
+    return false;
+  }
+}
+
+async function enviarGoles(ctx){
+  if(goles.length===0){
+    document.getElementById('statusGoles').style.display='none';
+    return true;
+  }
+  document.getElementById('statusGoles').style.display='flex';
+  setStatus('statusGoles','loading','⏳',`Enviando ${goles.length} goles...`);
+  let errores=0;
+  for(const g of goles){
+    try{
+      await submitForm(FORM_GOLES_ID,{
+        [EG.fecha]:ctx.fecha,[EG.hora]:ctx.hora,[EG.presencial]:ctx.presencial,
+        [EG.tribuna]:ctx.tribuna,[EG.asiento]:ctx.asiento,[EG.competicion]:ctx.competicion,
+        [EG.rival]:ctx.rival,[EG.gol]:g.tipo==='favor'?'A favor':'En Contra',
+        [EG.tiempo]:g.tiempo,[EG.minuto]:g.minuto,
+        [EG.resultParcial]:g.resultParcial||ctx.marcador,[EG.resultFinal]:ctx.marcador,
+        [EG.goleador]:g.goleador,[EG.asistencia]:g.asistencia,[EG.arco]:g.arco,
+        [EG.piernaDer]:g.piernaDer,[EG.piernaIzq]:g.piernaIzq,[EG.cabeza]:g.cabeza,
+        [EG.penal]:g.penal,[EG.tiroli]:g.tiroli,[EG.rebote]:g.rebote||'No',
+        [EG.autogol]:g.autogol||'No',[EG.contexto]:g.contexto,
+        [EG.resultadoFin]:ctx.resultado,[EG.acompanante]:ctx.acompanante,
+        [EG.clima]:ctx.clima,[EG.poleraEquipo]:ctx.poleraEquipo,[EG.poleraAgu]:ctx.poleraAgu,
+      });
+      await new Promise(r=>setTimeout(r,400));
+    }catch(e){errores++;}
+  }
+  if(errores===0){
+    setStatus('statusGoles','success','✅',`${goles.length} goles enviados correctamente`);
+    return true;
+  }else{
+    setStatus('statusGoles','error','⚠️',`${goles.length-errores}/${goles.length} goles enviados`);
+    return false;
+  }
+}
+
+async function enviarTodo(){
+  const btn=document.getElementById('btnEnviar');
+  btn.disabled=true;btn.textContent='⏳ Enviando...';
+  document.getElementById('statusBar').classList.add('visible');
+  document.getElementById('retryRow').style.display='none';
+
+  const ctx=buildCtx();
+  lastCtx=ctx;
+
+  const okPartido=await enviarPartido(ctx);
+  const okGoles=await enviarGoles(ctx);
+
+  btn.disabled=false;
+  if(okPartido&&okGoles){
+    btn.style.display='none';
+    document.getElementById('successScreen').style.display='block';
+  }else{
+    btn.textContent='⚡ ENVIAR TODO A GOOGLE SHEETS';
+    document.getElementById('retryRow').style.display='grid';
+    if(!okPartido) document.getElementById('btnRetryPartido').style.display='block';
+    else document.getElementById('btnRetryPartido').style.display='none';
+    if(!okGoles) document.getElementById('btnRetryGoles').style.display='block';
+    else document.getElementById('btnRetryGoles').style.display='none';
+    showNotif('Algunos envíos fallaron. Puedes reintentar.','err');
+  }
+}
+
+async function reintentarPartido(){
+  const ctx=lastCtx||buildCtx();
+  lastCtx=ctx;
+  const btn=document.getElementById('btnRetryPartido');
+  btn.disabled=true;
+  const ok=await enviarPartido(ctx);
+  btn.disabled=false;
+  if(ok){
+    btn.style.display='none';
+    checkAllDone();
+  }
+}
+
+async function reintentarGoles(){
+  const ctx=lastCtx||buildCtx();
+  lastCtx=ctx;
+  const btn=document.getElementById('btnRetryGoles');
+  btn.disabled=true;
+  const ok=await enviarGoles(ctx);
+  btn.disabled=false;
+  if(ok){
+    btn.style.display='none';
+    checkAllDone();
+  }
+}
+
+function checkAllDone(){
+  const partidoOk=document.getElementById('btnRetryPartido').style.display==='none';
+  const golesOk=document.getElementById('btnRetryGoles').style.display==='none';
+  if(partidoOk&&golesOk){
+    document.getElementById('retryRow').style.display='none';
+    document.getElementById('btnEnviar').style.display='none';
+    document.getElementById('successScreen').style.display='block';
+  }
+}
+
+function setStatus(id,tipo,icon,msg){
+  const el=document.getElementById(id);
+  el.querySelector('.status-icon').textContent=icon;
+  const txt=el.querySelector('.status-text');
+  txt.textContent=msg;
+  txt.className='status-text '+tipo;
+}
 
 // ============================================================
 // NUEVO PARTIDO
 // ============================================================
 function nuevoPartido(){
   goles=[];chipSelections={};colorSelections={colorEquipo:'',colorAgu:''};
-  presencial=false;tribunaSeleccionada='';resultadoSeleccionado='';climaValorFinal='';fixtureSeleccionado=null;
-  document.querySelectorAll('input').forEach(i=>{if(i.id!=='dt'&&i.id!=='asiento')i.value='';});
-  document.getElementById('dt').value='Daniel Garnero';document.getElementById('asiento').value='P61';
+  presencial=false;tribunaSeleccionada='';resultadoSeleccionado='';climaValorFinal='';
+  fixtureSeleccionado=null;esAutogol=false;editandoGolIdx=-1;lastCtx=null;
+
+  document.querySelectorAll('input[type="text"],input[type="number"],input[type="date"],input[type="time"]').forEach(i=>{
+    if(i.id!=='dt') i.value='';
+  });
+  const dtEl=document.getElementById('dt'); if(dtEl) dtEl.value='Daniel Garnero';
+  const asientoEl=document.getElementById('asiento'); if(asientoEl) asientoEl.value='P61';
+
   document.querySelectorAll('.chip,.jugador-chip').forEach(c=>c.classList.remove('selected'));
   document.querySelectorAll('.chip-color').forEach(c=>c.classList.remove('selected'));
   document.querySelectorAll('.res-btn').forEach(b=>b.classList.remove('selected'));
-  document.getElementById('togglePresencial').classList.remove('on');document.getElementById('datoPresencial').style.display='none';
-  document.getElementById('listaGoles').innerHTML='';document.getElementById('successScreen').style.display='none';
-  document.getElementById('btnEnviar').style.display='block';document.getElementById('btnEnviar').disabled=false;document.getElementById('btnEnviar').textContent='⚡ ENVIAR A GOOGLE SHEETS';
+
+  document.getElementById('togglePresencial').classList.remove('on');
+  document.getElementById('datoPresencial').style.display='none';
+
+  document.getElementById('listaGoles').innerHTML='';
+  const golesImpWrap=document.getElementById('golesImportadosWrap');
+  if(golesImpWrap) golesImpWrap.style.display='none';
+
+  document.getElementById('successScreen').style.display='none';
+  document.getElementById('btnEnviar').style.display='block';
+  document.getElementById('btnEnviar').disabled=false;
+  document.getElementById('btnEnviar').textContent='⚡ ENVIAR TODO A GOOGLE SHEETS';
   document.getElementById('statusBar').classList.remove('visible');
-  document.getElementById('golesImportadosWrap').style.display='none';
-  document.getElementById('climaBtnObtener').style.display='block';document.getElementById('climaBtnObtener').textContent='🌡 Obtener clima automático';document.getElementById('climaBtnObtener').disabled=false;
-  document.getElementById('climaAutoBox').style.display='none';document.getElementById('climaTag').style.display='none';
-  document.getElementById('aliTag').style.display='none';
+  document.getElementById('retryRow').style.display='none';
+
+  const climaBtnEl=document.getElementById('climaBtnObtener');
+  if(climaBtnEl){climaBtnEl.style.display='block';climaBtnEl.textContent='🌡 Obtener clima automático';climaBtnEl.disabled=false;}
+  const climaAutoEl=document.getElementById('climaAutoBox');
+  if(climaAutoEl) climaAutoEl.style.display='none';
+  const climaTagEl=document.getElementById('climaTag');
+  if(climaTagEl) climaTagEl.style.display='none';
+  const aliTagEl=document.getElementById('aliTag');
+  if(aliTagEl) aliTagEl.style.display='none';
+
   resetImport();
+  buildAlineacionInputs();
   document.getElementById('fecha').valueAsDate=new Date();
   goStep(1);
 }
 
-function parsearAlineacion(){
-  const texto=document.getElementById('alineacionTexto').value.trim();
-  if(!texto){showNotif('Pega la alineación primero','err');return;}
-  const jugadores=texto.split(/[,;\n]+/).map(j=>j.replace(/^\d+[.\-)\s]+/,'').trim()).filter(Boolean);
-  if(jugadores.length<1){showNotif('No se reconocieron jugadores','err');return;}
-  for(let i=1;i<=11;i++) document.getElementById('jug'+i).value='';
-  jugadores.slice(0,11).forEach((j,i)=>{ document.getElementById('jug'+(i+1)).value=j; });
-  jugadores.slice(11,16).forEach((j,i)=>{ document.getElementById('cam'+(i+1)).value=j; });
-  showNotif('✓ '+Math.min(jugadores.length,11)+' jugadores distribuidos','ok');
-  document.getElementById('alineacionTexto').value='';
-}
-
 document.getElementById('fecha').valueAsDate=new Date();
-document.getElementById('buscarFecha').valueAsDate=new Date();
+buildAlineacionInputs();
 </script>
 </body>
 </html>
