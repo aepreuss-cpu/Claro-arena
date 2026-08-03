@@ -377,7 +377,7 @@
       <div class="status-item" id="statusGoles" style="display:none;"><span class="status-icon">⏳</span><span class="status-text loading">Enviando goles...</span></div>
     </div>
     <button class="btn-primary" id="btnEnviar" onclick="enviarTodo()">⚡ ENVIAR TODO A GOOGLE SHEETS</button>
-    <div class="retry-row" id="retryRow" style="display:none;">
+    <div class="retry-row" id="retryRow" style="display:grid;">
       <button class="btn-retry" id="btnRetryPartido" onclick="reintentarPartido()">↻ Reintentar Partido</button>
       <button class="btn-retry" id="btnRetryGoles" onclick="reintentarGoles()">↻ Reintentar Goles</button>
     </div>
@@ -1020,7 +1020,6 @@ async function enviarTodo(){
   const btn=document.getElementById('btnEnviar');
   btn.disabled=true;btn.textContent='⏳ Enviando...';
   document.getElementById('statusBar').classList.add('visible');
-  document.getElementById('retryRow').style.display='none';
 
   const ctx=buildCtx();
   lastCtx=ctx;
@@ -1029,17 +1028,13 @@ async function enviarTodo(){
   const okGoles=await enviarGoles(ctx);
 
   btn.disabled=false;
+  btn.textContent='⚡ ENVIAR TODO A GOOGLE SHEETS';
+
   if(okPartido&&okGoles){
-    btn.style.display='none';
     document.getElementById('successScreen').style.display='block';
+    showNotif('¡Todo enviado correctamente!','ok');
   }else{
-    btn.textContent='⚡ ENVIAR TODO A GOOGLE SHEETS';
-    document.getElementById('retryRow').style.display='grid';
-    if(!okPartido) document.getElementById('btnRetryPartido').style.display='block';
-    else document.getElementById('btnRetryPartido').style.display='none';
-    if(!okGoles) document.getElementById('btnRetryGoles').style.display='block';
-    else document.getElementById('btnRetryGoles').style.display='none';
-    showNotif('Algunos envíos fallaron. Puedes reintentar.','err');
+    showNotif('Algunos envíos fallaron. Usa los botones de reintento.','err');
   }
 }
 
@@ -1047,36 +1042,22 @@ async function reintentarPartido(){
   const ctx=lastCtx||buildCtx();
   lastCtx=ctx;
   const btn=document.getElementById('btnRetryPartido');
-  btn.disabled=true;
+  btn.disabled=true;btn.textContent='⏳ Reintentando...';
+  document.getElementById('statusBar').classList.add('visible');
   const ok=await enviarPartido(ctx);
-  btn.disabled=false;
-  if(ok){
-    btn.style.display='none';
-    checkAllDone();
-  }
+  btn.disabled=false;btn.textContent='↻ Reintentar Partido';
+  if(ok) showNotif('Partido enviado ✓','ok');
 }
 
 async function reintentarGoles(){
   const ctx=lastCtx||buildCtx();
   lastCtx=ctx;
   const btn=document.getElementById('btnRetryGoles');
-  btn.disabled=true;
+  btn.disabled=true;btn.textContent='⏳ Reintentando...';
+  document.getElementById('statusBar').classList.add('visible');
   const ok=await enviarGoles(ctx);
-  btn.disabled=false;
-  if(ok){
-    btn.style.display='none';
-    checkAllDone();
-  }
-}
-
-function checkAllDone(){
-  const partidoOk=document.getElementById('btnRetryPartido').style.display==='none';
-  const golesOk=document.getElementById('btnRetryGoles').style.display==='none';
-  if(partidoOk&&golesOk){
-    document.getElementById('retryRow').style.display='none';
-    document.getElementById('btnEnviar').style.display='none';
-    document.getElementById('successScreen').style.display='block';
-  }
+  btn.disabled=false;btn.textContent='↻ Reintentar Goles';
+  if(ok) showNotif('Goles enviados ✓','ok');
 }
 
 function setStatus(id,tipo,icon,msg){
@@ -1117,7 +1098,7 @@ function nuevoPartido(){
   document.getElementById('btnEnviar').disabled=false;
   document.getElementById('btnEnviar').textContent='⚡ ENVIAR TODO A GOOGLE SHEETS';
   document.getElementById('statusBar').classList.remove('visible');
-  document.getElementById('retryRow').style.display='none';
+  document.getElementById('retryRow').style.display='grid';
 
   const climaBtnEl=document.getElementById('climaBtnObtener');
   if(climaBtnEl){climaBtnEl.style.display='block';climaBtnEl.textContent='🌡 Obtener clima automático';climaBtnEl.disabled=false;}
