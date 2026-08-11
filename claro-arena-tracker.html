@@ -716,7 +716,7 @@ async function importarPartido(){
       });
       renderGoles();actualizarMarcador();
       document.getElementById('golesImportadosWrap').style.display='block';
-      document.getElementById('golesImportadosLista').innerHTML=goles.map(g=>`<div style="padding:3px 0;border-bottom:1px solid var(--card-border);display:flex;justify-content:space-between;"><span>${g.minuto}' ${g.goleador}</span><span style="color:${g.tipo==='favor'?'#7AAAF0':'#FF8A9A'}">${g.tipo==='favor'?'✓ favor':'✗ contra'}</span></div>`).join('');
+      document.getElementById('golesImportadosLista').innerHTML='<div style="font-size:12px;color:var(--gris);">Revisa y edita cada gol con ✏️ en la lista de abajo si algo no está correcto (ej: dirección de un autogol).</div>';
       golesOk=true;
     }
   }catch(e){console.error('Timeline:',e);}
