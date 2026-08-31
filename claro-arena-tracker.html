@@ -248,6 +248,7 @@
             <div class="chip-color azul" onclick="selectColor(this,'colorAgu','Azul')" title="Azul"></div>
             <div class="chip-color rojo" onclick="selectColor(this,'colorAgu','Roja')" title="Roja"></div>
           </div>
+          <input type="text" id="colorAguCustom" placeholder="O escribe el color manualmente..." style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;margin-bottom:10px;">
           <div class="sublabel">Marca</div>
           <div class="chip-group" id="marcaAguGroup" style="margin-bottom:8px;">
             <div class="chip" onclick="selectChip(this,'marcaAgu')">Puma</div>
@@ -256,6 +257,7 @@
             <div class="chip" onclick="selectChip(this,'marcaAgu')">Under Armour</div>
             <div class="chip" onclick="selectChip(this,'marcaAgu')">Umbro</div>
           </div>
+          <input type="text" id="marcaAguCustom" placeholder="O escribe la marca manualmente..." style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;margin-bottom:10px;">
           <div class="sublabel">Versión</div>
           <div class="chip-group" id="versionAguGroup" style="margin-bottom:8px;">
             <div class="chip" onclick="selectChip(this,'versionAgu')">Edición Claro Arena</div>
@@ -265,7 +267,7 @@
             <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2022</div>
             <div class="chip" onclick="selectChip(this,'versionAgu')">Local 2021</div>
           </div>
-          <input type="text" id="poleraAguCustom" placeholder="O escribe manualmente..." style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;">
+          <input type="text" id="poleraAguCustom" placeholder="O escribe la versión manualmente..." style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;">
         </div>
       </div>
     </div>
@@ -293,6 +295,7 @@
           <div class="chip-color azul" onclick="selectColor(this,'colorEquipo','Azul')" title="Azul"></div>
           <div class="chip-color rojo" onclick="selectColor(this,'colorEquipo','Roja')" title="Roja"></div>
         </div>
+        <input type="text" id="colorEquipoCustom" placeholder="O escribe el color manualmente..." style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;margin-bottom:10px;">
         <div class="sublabel">Marca</div>
         <div class="chip-group" id="marcaEquipoGroup" style="margin-bottom:8px;">
           <div class="chip" onclick="selectChip(this,'marcaEquipo')">Puma</div>
@@ -301,6 +304,7 @@
           <div class="chip" onclick="selectChip(this,'marcaEquipo')">Under Armour</div>
           <div class="chip" onclick="selectChip(this,'marcaEquipo')">Umbro</div>
         </div>
+        <input type="text" id="marcaEquipoCustom" placeholder="O escribe la marca manualmente..." style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;margin-bottom:10px;">
         <div class="sublabel">Versión</div>
         <div class="chip-group" id="versionEquipoGroup" style="margin-bottom:8px;">
           <div class="chip" onclick="selectChip(this,'versionEquipo')">Edición Claro Arena</div>
@@ -310,7 +314,7 @@
           <div class="chip" onclick="selectChip(this,'versionEquipo')">Local 2022</div>
           <div class="chip" onclick="selectChip(this,'versionEquipo')">Local 2021</div>
         </div>
-        <input type="text" id="poleraEquipoCustom" placeholder="O escribe manualmente..." style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;">
+        <input type="text" id="poleraEquipoCustom" placeholder="O escribe la versión manualmente..." style="width:100%;background:#080E1C;border:1px solid var(--card-border);border-radius:8px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;">
       </div>
     </div>
 
@@ -753,13 +757,18 @@ async function obtenerClima(){
 // POLERAS
 // ============================================================
 function getPoleraString(colorKey,marcaKey,versionKey,customId){
-  const color=colorSelections[colorKey]||'';const marca=chipSelections[marcaKey]||'';
+  const colorCustomId=colorKey==='colorEquipo'?'colorEquipoCustom':'colorAguCustom';
+  const marcaCustomId=marcaKey==='marcaEquipo'?'marcaEquipoCustom':'marcaAguCustom';
+  const color=colorSelections[colorKey]||document.getElementById(colorCustomId).value.trim()||'';
+  const marca=chipSelections[marcaKey]||document.getElementById(marcaCustomId).value.trim()||'';
   const version=chipSelections[versionKey]||document.getElementById(customId).value.trim()||'';
   return[color,marca,version].filter(Boolean).join(' - ');
 }
 function selectColor(el,colorKey,valor){
   el.parentElement.querySelectorAll('.chip-color').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');colorSelections[colorKey]=valor;
+  const colorCustomId=colorKey==='colorEquipo'?'colorEquipoCustom':'colorAguCustom';
+  document.getElementById(colorCustomId).value='';
 }
 
 // ============================================================
@@ -798,7 +807,12 @@ function toggleAutogol(){
     label.textContent='Goleador';
   }
 }
-function selectChip(el,group){el.closest('.chip-group').querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');chipSelections[group]=el.textContent.trim();if(group==='tribuna')tribunaSeleccionada=el.textContent.trim();}
+function selectChip(el,group){el.closest('.chip-group').querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');chipSelections[group]=el.textContent.trim();if(group==='tribuna')tribunaSeleccionada=el.textContent.trim();
+  if(group==='marcaEquipo')document.getElementById('marcaEquipoCustom').value='';
+  if(group==='marcaAgu')document.getElementById('marcaAguCustom').value='';
+  if(group==='versionEquipo')document.getElementById('poleraEquipoCustom').value='';
+  if(group==='versionAgu')document.getElementById('poleraAguCustom').value='';
+}
 function toggleChip(el,group){const isSelected=el.classList.contains('selected');el.classList.toggle('selected',!isSelected);chipSelections[group]=!isSelected?el.textContent.trim():'';}
 function selectResultado(val,el){document.querySelectorAll('.res-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');resultadoSeleccionado=val;}
 
